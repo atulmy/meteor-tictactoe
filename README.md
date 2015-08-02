@@ -1,3 +1,7 @@
+# Under Development
+
+Expected release: Very soon.
+
 # Tic Tac Toe (aka X and Zeroes)
 
 - Play your all time favourite game Tic Tac Toe online with your friends or with computer.
@@ -8,7 +12,7 @@
 
 ### Web
 
-Play now: http://tictactoe.atulmy.com
+URL: http://tictactoe.atulmy.com
 
 Alternate URL: http://bit.ly/tictactoe-online
 
