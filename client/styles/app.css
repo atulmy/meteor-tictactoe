@@ -1,0 +1,11 @@
+/* --------------------- common --------------------- */
+.border-top {
+    border-top: 2px solid #000;
+}
+.border-right {
+    border-right: 2px solid #000;
+}
+.mb0 {
+    margin-bottom: 0px;
+}
+/* -------------------x- common -x------------------- */
