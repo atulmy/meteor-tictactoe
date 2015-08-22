@@ -1,69 +1,29 @@
 <template name="pagesHome">
 
-    <div class="row">
-        <div class="col s12">
-            <ul class="tabs">
-                <li class="tab col s3"><a href="#test1">Test 1</a></li>
-                <li class="tab col s3"><a class="active" href="#test2">Test 2</a></li>
-                <li class="tab col s3"><a href="#test3">Test 3</a></li>
-            </ul>
+    <div class="row display-none animate-fade-in">
+        <div class="col s12 center-align">
+            <img src="/images/logo.png" style="width: 200px;"/>
         </div>
-        <div id="test1" class="col s12">Test 1</div>
-        <div id="test2" class="col s12">Test 2</div>
-        <div id="test3" class="col s12">Test 3</div>
+
+        <div class="col s12 center-align mb20">
+            <h2 class="text-uppercase">Tic Tac Toe</h2>
+        </div>
+
+        <div class="col s12 m3 offset-m3 center-align">
+            <a class="waves-effect waves-light deep-orange darken-1 btn-large btn-block mb20"><i class="material-icons left">face</i> Play with friend </a>
+        </div>
+
+        <div class="col s12 m3 center-align">
+            <a class="waves-effect waves-light btn-large btn-block mb20"><i class="material-icons left">android</i> Play with computer</a>
+        </div>
     </div>
+
     <script>
-        $(document).ready(function(){
-            $('ul.tabs').tabs();
+        $( function() {
+            Meteor.setTimeout(function() {
+                $('.animate-fade-in').fadeIn();
+            }, 300);
         });
     </script>
-
-    <div class="row">
-        <div class="col s12 m4 center-align">
-            a
-        </div>
-
-        <div class="col s12 m4 center-align">
-            <div class="row mb0">
-                <div class="col s4 center-align border-right">
-                    <a href="#"><i class="material-icons large">radio_button_unchecked</i></a>
-                </div>
-                <div class="col s4 center-align border-right">
-                    <i class="material-icons large">close</i>
-                </div>
-                <div class="col s4 center-align">
-                    <i class="material-icons large">close</i>
-                </div>
-            </div>
-
-            <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right">
-                    <i class="material-icons large">radio_button_unchecked</i>
-                </div>
-                <div class="col s4 center-align border-right">
-                    <i class="material-icons large">close</i>
-                </div>
-                <div class="col s4 center-align">
-                    <i class="material-icons large">close</i>
-                </div>
-            </div>
-
-            <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right">
-                    <i class="material-icons large">radio_button_unchecked</i>
-                </div>
-                <div class="col s4 center-align border-right">
-                    <i class="material-icons large">close</i>
-                </div>
-                <div class="col s4 center-align">
-                    <i class="material-icons large">close</i>
-                </div>
-            </div>
-        </div>
-
-        <div class="col s12 m4 center-align">
-            b
-        </div>
-    </div>
 
 </template>

@@ -1,4 +1,8 @@
 /* --------------------- common --------------------- */
+html, body {
+    background-color: #263238;
+    color: #fff;
+}
 .border-top {
     border-top: 2px solid #000;
 }
@@ -7,5 +11,24 @@
 }
 .mb0 {
     margin-bottom: 0px;
+}
+.mb20 {
+    margin-bottom: 20px;
+}
+
+.display-none { display: none; }
+
+.btn-block {
+    width: 100%;
+}
+.at-social-btn {
+    margin-bottom: 20px;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+.col.s12.m8.offset-m2.l4.offset-l4.z-depth-1 {
+    box-shadow: none !important;
 }
 /* -------------------x- common -x------------------- */
