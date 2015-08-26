@@ -33,3 +33,7 @@ Template.registerHelper('and', function (a, b) {
 Template.registerHelper('and', function (a, b) {
     return a && b;
 });
+
+Template.registerHelper('niceTime', function (t) {
+    return moment(t).fromNow();
+});

@@ -2,28 +2,20 @@
 
     <div class="row display-none animate-fade-in">
         <div class="col s12 center-align">
-            <img src="/images/logo.png" style="width: 200px;"/>
+            <a href="{{pathFor route='home'}}"><img src="/images/logo.png" alt="Tic Tac Toe" class="img-logo"/></a>
         </div>
 
         <div class="col s12 center-align mb20">
-            <h2 class="text-uppercase">Tic Tac Toe</h2>
+            <h2 class="text-uppercase white-text">Tic Tac Toe</h2>
         </div>
 
         <div class="col s12 m3 offset-m3 center-align">
-            <a class="waves-effect waves-light deep-orange darken-1 btn-large btn-block mb20"><i class="material-icons left">face</i> Play with friend </a>
+            <a href="{{ pathFor route='gamePlayFriend' }}" class="waves-effect waves-light deep-orange darken-1 btn-large btn-block mb20"><i class="material-icons left">face</i> Play with friend </a>
         </div>
 
         <div class="col s12 m3 center-align">
-            <a class="waves-effect waves-light btn-large btn-block mb20"><i class="material-icons left">android</i> Play with computer</a>
+            <a href="{{ pathFor route='gamePlayComputer' }}" class="waves-effect waves-light btn-large btn-block mb20"><i class="material-icons left">android</i> Play with computer</a>
         </div>
     </div>
-
-    <script>
-        $( function() {
-            Meteor.setTimeout(function() {
-                $('.animate-fade-in').fadeIn();
-            }, 300);
-        });
-    </script>
 
 </template>

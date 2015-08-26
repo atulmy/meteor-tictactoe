@@ -1,34 +1,82 @@
 /* --------------------- common --------------------- */
 html, body {
     background-color: #263238;
-    color: #fff;
 }
-.border-top {
-    border-top: 2px solid #000;
-}
-.border-right {
-    border-right: 2px solid #000;
-}
-.mb0 {
-    margin-bottom: 0px;
-}
-.mb20 {
-    margin-bottom: 20px;
-}
+.border-top { border-top: 8px solid #455a64; }
+.border-right { border-right: 8px solid #455a64; }
+.mt0 { margin-top: 0px; }
+.mb0 { margin-bottom: 0px; }
+.mb20 { margin-bottom: 20px; }
+.mt25 { margin-top: 25px; }
+.pa0 { padding: 0px !important; }
 
 .display-none { display: none; }
+.btn-block { width: 100%; }
+.text-uppercase { text-transform: uppercase; }
+.absolute-center {
+    bottom: 0;
+    display: block;
+    left: 0;
+    margin: 0 auto;
+    position: absolute;
+    right: 0;
+}
+/* --------------------- / common --------------------- */
 
-.btn-block {
-    width: 100%;
+/* --------------------- content --------------------- */
+/* header */
+header i { font-size: 3.5rem !important; margin-left: 5px; }
+.img-logo { width: 200px; }
+/* signin signup */
+.col.s12.m8.offset-m2.l4.offset-l4.z-depth-1 { box-shadow: none !important; }
+.at-form .at-title .header { color: #fff; }
+.at-form .at-signup-link, .at-form .at-signin-link { color: #fff; }
+.at-form .at-social-btn { margin-bottom: 20px; }
+/* matrix */
+#matrix .cell {
+    cursor: pointer;
+    color: #fff;
+    align-items: center;
+    display: flex;
 }
-.at-social-btn {
-    margin-bottom: 20px;
+#matrix .cell .material-icons {
+    margin: 0px auto;
 }
+#matrix .cell .material-icons {
+    display: none;
+}
+#matrix .cell:hover .material-icons {
+    display: inline-block;
+}
+/* --------------------- / content --------------------- */
 
-.text-uppercase {
-    text-transform: uppercase;
+/* --------------------- materialize override --------------------- */
+.collection { border: none; }
+.collection .collection-item.avatar { min-height: 68px; }
+.collection .secondary-content i { font-size: 2.5rem; }
+#staggered-test li {
+    opacity: 0;
 }
-.col.s12.m8.offset-m2.l4.offset-l4.z-depth-1 {
-    box-shadow: none !important;
+.tabs .tab a {
+    color: #ff5722;
 }
-/* -------------------x- common -x------------------- */
+.tabs .tab a:hover {
+    color: #e65100;
+}
+.tabs .indicator {
+    background-color: #ff5722;
+}
+/* --------------------- / materialize override --------------------- */
+
+/* --------------------- Responsive Fixes --------------------- */
+/* small device */
+@media (max-width: 767px) {
+
+}
+/* big device */
+@media only screen and (min-width : 768px) {
+    .tab-content {
+        display: block !important;
+    }
+}
+/* --------------------- / Responsive Fixes --------------------- */

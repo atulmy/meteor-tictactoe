@@ -1,21 +1,13 @@
 <template name="commonHeader">
 
     <header>
-        <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons medium deep-orange-text text-darken-1">menu</i></a>
+        <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons deep-orange-text text-darken-1">menu</i></a>
 
         <ul id="slide-out" class="side-nav">
             <li><a href="{{pathFor route='home'}}">Home</a></li>
-            <li><a href="{{pathFor route='private'}}">Private</a></li>
+            <li><a href="{{pathFor route='about'}}">About</a></li>
+            <li><a href="http://atulmy.com" target="_blank" title="http://atulmy.com">&copy; atulmy.com</a></li>
         </ul>
     </header>
-
-    <script>
-        $( function() {
-            $(".button-collapse").sideNav();
-            $('.side-nav').on('click', function() {
-                $('.button-collapse').sideNav('hide');
-            });
-        });
-    </script>
 
 </template>

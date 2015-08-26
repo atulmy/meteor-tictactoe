@@ -4,8 +4,11 @@ Router.configure({
     loadingTemplate: 'commonLoading'
 });
 
+// Login / Signup
+AccountsTemplates.configureRoute('signIn');
+AccountsTemplates.configureRoute('signUp');
 Router.plugin('ensureSignedIn', {
-    only: ['private']
+    only: ['gamePlayFriend', 'gamePlayComputer']
 });
 
 // Pages
@@ -15,10 +18,45 @@ Router.plugin('ensureSignedIn', {
         template: 'pagesHome'
     });
 
-    Router.route('/private', {
-        name: 'private',
-        template: 'pagesHome'
+    // About
+    Router.route('/about', {
+        name: 'about',
+        template: 'pagesAbout'
     });
 
-AccountsTemplates.configureRoute('signIn');
-AccountsTemplates.configureRoute('signUp');
+// Game
+    // Play with Friend
+    Router.route('/play/friend', {
+        name: 'gamePlayFriend',
+        template: 'gamePlayFriend',
+        waitOn: function() {
+            return Meteor.subscribe('gamesOnline')
+        },
+        onBeforeAction: function() {
+            var onlineGamesCountDb = Games.find({}, {sort: {createdAt: -1}}).count();
+            Session.set('onlineGamesCount', onlineGamesCountDb);
+            this.next();
+        },
+    });
+
+    // Play with Computer
+    Router.route('/play/computer', {
+        name: 'gamePlayComputer',
+        template: 'gamePlayComputer'
+    });
+
+    // Play with Computer
+    Router.route('/play/:gameId', {
+        name: 'gamePlay',
+        template: 'gamePlay',
+        waitOn: function() {
+            return Meteor.subscribe('game', this.params.gameId);
+        },
+        onBeforeAction: function() {
+            Session.set('gameId', this.params.gameId);
+            this.next();
+        },
+        onStop: function() {
+            Session.set('gameId', '');
+        }
+    });

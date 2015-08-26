@@ -1,68 +1,88 @@
-<template name="gameIndex">
+<template name="gamePlay">
 
     <div class="row">
-        <div class="col s12">
+        <div class="col s12 hide-on-med-and-up mb20">
             <ul class="tabs">
-                <li class="tab col s3"><a href="#test1">Test 1</a></li>
-                <li class="tab col s3"><a class="active" href="#test2">Test 2</a></li>
-                <li class="tab col s3"><a href="#test3">Test 3</a></li>
+                <li class="tab col s3"><a class="active" href="#matrix">Game</a></li>
+                <li class="tab col s3"><a href="#chat">Chat</a></li>
             </ul>
         </div>
-        <div id="test1" class="col s12">Test 1</div>
-        <div id="test2" class="col s12">Test 2</div>
-        <div id="test3" class="col s12">Test 3</div>
-    </div>
-    <script>
-        $(document).ready(function(){
-            $('ul.tabs').tabs();
-        });
-    </script>
 
-    <div class="row">
-        <div class="col s12 m4 center-align">
-            a
-        </div>
-
-        <div class="col s12 m4 center-align">
+        <div class="col s12 m4 offset-m2 center-align tab-content" id="matrix">
             <div class="row mb0">
-                <div class="col s4 center-align border-right">
-                    <a href="#"><i class="material-icons large">radio_button_unchecked</i></a>
+                <div class="col s4 center-align border-right cell">
+                    <i class="material-icons icon-o large">radio_button_unchecked</i>
+                    <i class="material-icons icon-x large">close</i>
                 </div>
-                <div class="col s4 center-align border-right">
+                <div class="col s4 center-align border-right cell">
                     <i class="material-icons large">close</i>
                 </div>
-                <div class="col s4 center-align">
-                    <i class="material-icons large">close</i>
-                </div>
-            </div>
-
-            <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right">
-                    <i class="material-icons large">radio_button_unchecked</i>
-                </div>
-                <div class="col s4 center-align border-right">
-                    <i class="material-icons large">close</i>
-                </div>
-                <div class="col s4 center-align">
+                <div class="col s4 center-align cell">
                     <i class="material-icons large">close</i>
                 </div>
             </div>
 
             <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right">
+                <div class="col s4 center-align border-right cell">
                     <i class="material-icons large">radio_button_unchecked</i>
                 </div>
-                <div class="col s4 center-align border-right">
+                <div class="col s4 center-align border-right cell">
                     <i class="material-icons large">close</i>
                 </div>
-                <div class="col s4 center-align">
+                <div class="col s4 center-align cell">
+                    <i class="material-icons large">close</i>
+                </div>
+            </div>
+
+            <div class="row mb0 border-top">
+                <div class="col s4 center-align border-right cell">
+                    <i class="material-icons large">radio_button_unchecked</i>
+                </div>
+                <div class="col s4 center-align border-right cell">
+                    <i class="material-icons large">close</i>
+                </div>
+                <div class="col s4 center-align cell">
                     <i class="material-icons large">close</i>
                 </div>
             </div>
         </div>
 
-        <div class="col s12 m4 center-align">
-            b
+        <div class="col s12 m3 offset-m1 animate-fade-in display-none tab-content" id="chat">
+            <h3 class="white-text mt0"><i class="material-icons small">chat</i> Chat</h3>
+
+            <form>
+                <div class="row white">
+                    <div class="input-field col s12">
+                        <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+                    </div>
+                    <div class="input-field col s12">
+                        <button class="waves-effect waves-light teal lighten-1 btn btn-block mb20">Send</button>
+                    </div>
+                </div>
+            </form>
+
+            <ul class="collection">
+                <li class="collection-item avatar">
+                    <i class="material-icons circle">face</i>
+
+                    <span class="title">Atul Yadav</span>
+                    <p>Created 5 minutes ago</p>
+                </li>
+
+                <li class="collection-item avatar">
+                    <i class="material-icons circle">face</i>
+
+                    <span class="title">Atul Yadav</span>
+                    <p>Created 5 minutes ago</p>
+                </li>
+
+                <li class="collection-item avatar">
+                    <i class="material-icons circle">face</i>
+
+                    <span class="title">Atul Yadav</span>
+                    <p>Created 5 minutes ago</p>
+                </li>
+            </ul>
         </div>
     </div>
 

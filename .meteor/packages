@@ -10,8 +10,8 @@ aldeed:collection2
 service-configuration
 
 iron:router
-useraccounts:iron-routing
 zimme:active-route
+useraccounts:iron-routing
 
 accounts-facebook
 accounts-google
@@ -20,3 +20,4 @@ useraccounts:materialize
 materialize:materialize
 fortawesome:fontawesome
 
+momentjs:moment
