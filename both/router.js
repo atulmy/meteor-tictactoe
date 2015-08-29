@@ -8,7 +8,8 @@ Router.configure({
 AccountsTemplates.configureRoute('signIn');
 AccountsTemplates.configureRoute('signUp');
 Router.plugin('ensureSignedIn', {
-    only: ['gamePlayFriend', 'gamePlayComputer']
+    except: ['home', 'about']
+    //only: ['about']
 });
 
 // Pages
@@ -45,7 +46,7 @@ Router.plugin('ensureSignedIn', {
         template: 'gamePlayComputer'
     });
 
-    // Play with Computer
+    // Play Game
     Router.route('/play/:gameId', {
         name: 'gamePlay',
         template: 'gamePlay',

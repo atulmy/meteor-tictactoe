@@ -10,6 +10,7 @@ Template.gamePlayFriend.helpers({
         return Games.find({}, {sort: {createdAt: -1}}).count();
     },
 
+    /*
     gamesOnlineCountRefresh: function() {
         var onlineGamesCountSession = isNaN(Session.get('onlineGamesCount')) ? 0 : Session.get('onlineGamesCount');
         var onlineGamesCountDb = Games.find({}, {sort: {createdAt: -1}}).count();
@@ -23,6 +24,7 @@ Template.gamePlayFriend.helpers({
         }
         return onlineGamesCountSession;
     }
+    */
 });
 
 // Events
@@ -53,7 +55,8 @@ Template.gamePlayFriend.events({
 Template.gamePlayFriend.rendered = function() {
     $( function() {
         $('.animate-fade-in').fadeIn();
-        Materialize.showStaggeredList('#staggered-test');
+        Materialize.showStaggeredList('.staggered-list');
+        $('#staggered-list').removeClass('staggered-list');
     });
 
 

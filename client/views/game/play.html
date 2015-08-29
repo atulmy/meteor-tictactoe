@@ -10,78 +10,58 @@
 
         <div class="col s12 m4 offset-m2 center-align tab-content" id="matrix">
             <div class="row mb0">
-                <div class="col s4 center-align border-right cell">
-                    <i class="material-icons icon-o large">radio_button_unchecked</i>
-                    <i class="material-icons icon-x large">close</i>
-                </div>
-                <div class="col s4 center-align border-right cell">
-                    <i class="material-icons large">close</i>
-                </div>
-                <div class="col s4 center-align cell">
-                    <i class="material-icons large">close</i>
-                </div>
+                <div class="col s4 center-align border-right cell cell-0-0" cell-row="0" cell-col="0"></div>
+                <div class="col s4 center-align border-right cell cell-0-1" cell-row="0" cell-col="1"></div>
+                <div class="col s4 center-align cell cell-0-2" cell-row="0" cell-col="2"></div>
             </div>
 
             <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right cell">
-                    <i class="material-icons large">radio_button_unchecked</i>
-                </div>
-                <div class="col s4 center-align border-right cell">
-                    <i class="material-icons large">close</i>
-                </div>
-                <div class="col s4 center-align cell">
-                    <i class="material-icons large">close</i>
-                </div>
+                <div class="col s4 center-align border-right cell cell-1-0" cell-row="1" cell-col="0"></div>
+                <div class="col s4 center-align border-right cell cell-1-1" cell-row="1" cell-col="1"></div>
+                <div class="col s4 center-align cell cell-1-2" cell-row="1" cell-col="2"></div>
             </div>
 
             <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right cell">
-                    <i class="material-icons large">radio_button_unchecked</i>
-                </div>
-                <div class="col s4 center-align border-right cell">
-                    <i class="material-icons large">close</i>
-                </div>
-                <div class="col s4 center-align cell">
-                    <i class="material-icons large">close</i>
-                </div>
+                <div class="col s4 center-align border-right cell cell-2-0" cell-row="2" cell-col="0"></div>
+                <div class="col s4 center-align border-right cell cell-2-1" cell-row="2" cell-col="1"></div>
+                <div class="col s4 center-align cell cell-2-2" cell-row="2" cell-col="2"></div>
             </div>
         </div>
+
+        <p>
+
+
+            {{ game.playerOne.name }}
+            {{ game.playerTwo.name }}
+        </p>
 
         <div class="col s12 m3 offset-m1 animate-fade-in display-none tab-content" id="chat">
             <h3 class="white-text mt0"><i class="material-icons small">chat</i> Chat</h3>
 
-            <form>
+            <form id="form-game-chat">
                 <div class="row white">
                     <div class="input-field col s12">
-                        <input placeholder="Placeholder" id="first_name" type="text" class="validate">
+                        <input placeholder="type your message here" id="form-game-chat-text" type="text" class="validate" autocomplete="off" />
                     </div>
                     <div class="input-field col s12">
-                        <button class="waves-effect waves-light teal lighten-1 btn btn-block mb20">Send</button>
+                        <button class="waves-effect waves-light teal lighten-1 btn btn-block mb20" id="form-game-chat-send" type="submit">Send</button>
                     </div>
                 </div>
             </form>
 
             <ul class="collection">
-                <li class="collection-item avatar">
-                    <i class="material-icons circle">face</i>
 
-                    <span class="title">Atul Yadav</span>
-                    <p>Created 5 minutes ago</p>
-                </li>
+                {{# each gameChat }}
 
-                <li class="collection-item avatar">
-                    <i class="material-icons circle">face</i>
+                    <li class="collection-item avatar">
+                        <i class="material-icons circle">face</i>
 
-                    <span class="title">Atul Yadav</span>
-                    <p>Created 5 minutes ago</p>
-                </li>
+                        <span class="title">{{ text }}</span>
+                        <p>{{ name }}</p>
+                    </li>
 
-                <li class="collection-item avatar">
-                    <i class="material-icons circle">face</i>
+                {{/ each }}
 
-                    <span class="title">Atul Yadav</span>
-                    <p>Created 5 minutes ago</p>
-                </li>
             </ul>
         </div>
     </div>

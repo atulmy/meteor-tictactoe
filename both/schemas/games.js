@@ -1,63 +1,77 @@
-var playerInfo = new SimpleSchema({
-    id: {
-        type: String
-    },
+// playerInfo
+    var playerInfo = new SimpleSchema({
+        id: {
+            type: String
+        },
 
-    name: {
-        type: String
-    },
+        name: {
+            type: String
+        },
 
-    image: {
-        type: String
-    },
+        image: {
+            type: String
+        },
 
-    ready: {
-        type: Boolean
-    },
+        ready: {
+            type: Boolean
+        },
 
-    winner: {
-        type: Boolean
-    }
-});
+        winner: {
+            type: Boolean
+        }
+    });
 
-var is = new SimpleSchema({
-    playing: {
-        type: Boolean
-    },
+// is
+    var is = new SimpleSchema({
+        playing: {
+            type: Boolean
+        },
 
-    completed: {
-        type: Boolean
-    },
+        completed: {
+            type: Boolean
+        },
 
-    isPublic: {
-        type: Boolean
-    }
-});
+        isPublic: {
+            type: Boolean
+        }
+    });
 
-var conversation = new SimpleSchema({
-    id: {
-        type: String
-    },
+// chat
+    var conversation = new SimpleSchema({
+        id: {
+            type: String
+        },
 
-    name: {
-        type: String
-    },
+        name: {
+            type: String
+        },
 
-    text: {
-        type: String
-    }
-});
+        text: {
+            type: String
+        }
+    });
 
-var chat = new SimpleSchema({
-    show: {
-        type: Boolean
-    },
+    var chat = new SimpleSchema({
+        show: {
+            type: Boolean
+        },
 
-    conversation: {
-        type: [conversation]
-    }
-});
+        conversation: {
+            type: [conversation]
+        }
+    });
 
+// matrix
+    var col = new SimpleSchema({
+        selection: {
+            type: String
+        },
+        player: {
+            type: String
+        }
+    });
+
+// Games
 Games.attachSchema(new SimpleSchema({
     playerOne: {
         type: playerInfo
@@ -70,6 +84,14 @@ Games.attachSchema(new SimpleSchema({
 
     ai: {
         type: Boolean
+    },
+
+    matrix: {
+        type: [
+            [col, col, col],
+            [col, col, col],
+            [col, col, col]
+        ]
     },
 
     chat: {

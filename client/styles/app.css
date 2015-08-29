@@ -32,6 +32,10 @@ header i { font-size: 3.5rem !important; margin-left: 5px; }
 .at-form .at-title .header { color: #fff; }
 .at-form .at-signup-link, .at-form .at-signin-link { color: #fff; }
 .at-form .at-social-btn { margin-bottom: 20px; }
+/* list */
+.staggered-list li {
+    opacity: 0;
+}
 /* matrix */
 #matrix .cell {
     cursor: pointer;
@@ -42,21 +46,12 @@ header i { font-size: 3.5rem !important; margin-left: 5px; }
 #matrix .cell .material-icons {
     margin: 0px auto;
 }
-#matrix .cell .material-icons {
-    display: none;
-}
-#matrix .cell:hover .material-icons {
-    display: inline-block;
-}
 /* --------------------- / content --------------------- */
 
 /* --------------------- materialize override --------------------- */
 .collection { border: none; }
 .collection .collection-item.avatar { min-height: 68px; }
 .collection .secondary-content i { font-size: 2.5rem; }
-#staggered-test li {
-    opacity: 0;
-}
 .tabs .tab a {
     color: #ff5722;
 }
