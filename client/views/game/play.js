@@ -13,6 +13,34 @@ Template.gamePlay.helpers({
     gameChat: function() {
         var game = Games.findOne({_id: Session.get('gameId')});
         return game.chat.conversation.reverse();
+    },
+
+    getCellData: function(row, col) {
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if(game) {
+            var matrix = JSON.parse(game.matrix);
+            if(matrix[row][col] !== 'undefined') {
+                if(matrix[row][col].selection === 'x') {
+                    return '<i class="material-icons large">close</i>';
+                } else if(matrix[row][col].selection === 'o') {
+                    return '<i class="material-icons large">radio_button_unchecked</i>';
+                }
+            }
+        }
+        return "&nbsp;";
+    },
+
+    gamePlayerName: function(player) {
+        var playerName = 'Player';
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if(game) {
+            if(player === 'one') {
+                playerName = game.playerOne.name;
+            } else if(player === 'two') {
+                playerName = (typeof game.playerTwo !== 'undefined') ? game.playerTwo.name : '(Waiting for player...)';
+            }
+        }
+        return playerName;
     }
 });
 
@@ -54,8 +82,8 @@ Template.gamePlay.events({
 
         var game = Games.findOne({_id: Session.get('gameId')});
         if (game) {
-            var cellRow = template.$(event.currentTarget).attr('cell-row');
-            var cellCol = template.$(event.currentTarget).attr('cell-col');
+            var cellRow = parseInt(template.$(event.currentTarget).attr('cell-row'));
+            var cellCol = parseInt(template.$(event.currentTarget).attr('cell-col'));
             console.log(cellRow + ' ' + cellCol);
 
             var player = 'one';
@@ -84,21 +112,19 @@ Template.gamePlay.rendered = function() {
             });
         }
 
-        game.matrix.forEach(function(cols, row){
+        /*
+        game.matrix.forEach(function(data, key){
             //console.log('row '+row);
-            cols.forEach(function(data, col){
-                //console.log('col '+col);
-                //console.log(data);
 
-                if(typeof data.selection !== 'undefined') {
-                    if(data.selection === 'x') {
-                        $('#matrix .cell-'+row+'-'+col).html('<i class="material-icons large">close</i>');
-                    } else {
-                        $('#matrix .cell-'+row+'-'+col).html('<i class="material-icons large">radio_button_unchecked</i>');
-                    }
+            if(data !== null && typeof data.selection !== 'undefined') {
+                if(data.selection === 'x') {
+                    $('#matrix .cell-'+key).html('<i class="material-icons large">close</i>');
+                } else {
+                    $('#matrix .cell-'+key).html('<i class="material-icons large">radio_button_unchecked</i>');
                 }
-            });
+            }
         });
+        */
     } else {
         Router.go('home');
     }

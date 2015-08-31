@@ -22,26 +22,35 @@ Meteor.methods({
         }
 
         // create game document
+        var matrix = [
+            [{}, {}, {}],
+            [{}, {}, {}],
+            [{}, {}, {}]
+        ];
+        matrix = JSON.stringify(matrix);
         var game = {
             playerOne: {
                 id: Meteor.userId(),
                 name: Meteor.user().profile.name,
                 image: 'default.png',
                 ready: false,
+                score: 0,
                 winner: false
             },
+
             ai: ai,
-            matrix: [
-                [{selection: "x", player: "one"}, {}, {}],
-                [{}, {selection: "x", player: "one"}, {}],
-                [{}, {}, {selection: "x", player: "one"}]
-            ],
+
+            matrix: matrix,
+
             chat: {
                 show: true,
-                conversation: [
-                    //{id: 'COMPUTER', name: 'Help', text: 'Chat here...'}
-                ]
+                conversation: []
             },
+
+            status: {
+                playerJoined: false
+            },
+
             is: {
                 playing: false,
                 completed: false,
@@ -101,13 +110,14 @@ Meteor.methods({
         if(game) {
             var playerTwo = {
                 id: Meteor.userId(),
-                    name: Meteor.user().profile.name,
-                    image: 'default.png',
-                    ready: false,
-                    winner: false
+                name: Meteor.user().profile.name,
+                image: 'default.png',
+                ready: false,
+                score: 0,
+                winner: false
             };
 
-            var result = Games.update(game._id, {$set: {"playerTwo": playerTwo, "is.playing": true}});
+            var result = Games.update(game._id, {$set: {"playerTwo": playerTwo, "is.playing": true, "status.playerJoined": true}});
             if (result) {
                 response.success = true;
                 response.message = 'Done.';
@@ -131,18 +141,14 @@ Meteor.methods({
 
         var game = Games.findOne(gameId);
         if(game) {
-            var col = {
+            var matrix = JSON.parse(game.matrix);
+            matrix[cellRow][cellCol] = {
                 selection: "x",
                 player: "one"
-            }
-            var matrix = [
-                [col, col, col],
-                [col, col, col],
-                [col, col, col]
-            ];
+            };
+            matrix = JSON.stringify(matrix);
 
-            var result = Games.update(game._id, {$set: {matrix: matrix}}, {validate: false});
-            console.log(result);
+            var result = Games.update(game._id, {$set: {matrix: matrix}});
             if (result) {
                 response.success = true;
                 response.message = 'Done.';

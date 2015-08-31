@@ -5,10 +5,14 @@ html, body {
 .border-top { border-top: 8px solid #455a64; }
 .border-right { border-right: 8px solid #455a64; }
 .mt0 { margin-top: 0px; }
+.mt10 { margin-top: 10px; }
+.mt20 { margin-top: 20px; }
 .mb0 { margin-bottom: 0px; }
 .mb20 { margin-bottom: 20px; }
-.mt25 { margin-top: 25px; }
 .pa0 { padding: 0px !important; }
+.pa10 { padding: 10px; }
+.pl0 { padding-left: 0px !important; }
+.pr0 { padding-right: 0px !important; }
 
 .display-none { display: none; }
 .btn-block { width: 100%; }
@@ -26,6 +30,7 @@ html, body {
 /* --------------------- content --------------------- */
 /* header */
 header i { font-size: 3.5rem !important; margin-left: 5px; }
+header .button-collapse { display: inline-block; }
 .img-logo { width: 200px; }
 /* signin signup */
 .col.s12.m8.offset-m2.l4.offset-l4.z-depth-1 { box-shadow: none !important; }
@@ -60,7 +65,17 @@ header i { font-size: 3.5rem !important; margin-left: 5px; }
 }
 .tabs .indicator {
     background-color: #ff5722;
+    height: 4px;
 }
+.toast {
+    background-color: #fff;
+    color: #ff5722;
+}
+/*
+.collection-item h5, .collection-item p {
+    margin: 0px;
+}
+*/
 /* --------------------- / materialize override --------------------- */
 
 /* --------------------- Responsive Fixes --------------------- */

@@ -16,6 +16,10 @@
             type: Boolean
         },
 
+        score: {
+            type: Number
+        },
+
         winner: {
             type: Boolean
         }
@@ -61,13 +65,26 @@
         }
     });
 
-// matrix
-    var col = new SimpleSchema({
-        selection: {
+// sets
+    var set = new SimpleSchema({
+        setNumber: {
+            type: Number
+        },
+
+        matrix: {
             type: String
         },
-        player: {
-            type: String
+
+        result: {
+            type: String,
+            optional: true
+        }
+    });
+
+// status
+    var status = new SimpleSchema({
+        playerJoined: {
+            type: Boolean
         }
     });
 
@@ -86,17 +103,18 @@ Games.attachSchema(new SimpleSchema({
         type: Boolean
     },
 
-    matrix: {
-        type: [
-            [col, col, col],
-            [col, col, col],
-            [col, col, col]
-        ]
+    sets: {
+        type: [set],
+        optional: true
     },
 
     chat: {
         type: chat,
         optional: true
+    },
+
+    status: {
+        type: status
     },
 
     is: {

@@ -1,42 +1,102 @@
 <template name="gamePlay">
 
     <div class="row">
+        <!-- Tabs -->
         <div class="col s12 hide-on-med-and-up mb20">
             <ul class="tabs">
+                <li class="tab col s3"><a href="#sets">Sets</a></li>
                 <li class="tab col s3"><a class="active" href="#matrix">Game</a></li>
                 <li class="tab col s3"><a href="#chat">Chat</a></li>
             </ul>
         </div>
 
-        <div class="col s12 m4 offset-m2 center-align tab-content" id="matrix">
+        <!-- Sets -->
+        <div class="col s12 m3 animate-fade-in display-none tab-content" id="sets">
+            <h3 class="white-text mt0 hide-on-small-only"><i class="material-icons small">format_list_numbered</i> Sets</h3>
+
+            <ul class="collection">
+                <li class="collection-item avatar">
+                    <i class="circle green">1</i>
+                    <span class="title">Atul Yadav</span>
+                    <p>Using X</p>
+                </li>
+                <li class="collection-item avatar">
+                    <i class="circle green">2</i>
+                    <span class="title">Foo Bar</span>
+                    <p>Using O</p>
+                </li>
+                <li class="collection-item avatar">
+                    <i class="circle green">3</i>
+                    <span class="title">Foo Bar</span>
+                    <p>Using O</p>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Matrix -->
+        <div class="col s12 m4 offset-m1 center-align tab-content" id="matrix">
             <div class="row mb0">
-                <div class="col s4 center-align border-right cell cell-0-0" cell-row="0" cell-col="0"></div>
-                <div class="col s4 center-align border-right cell cell-0-1" cell-row="0" cell-col="1"></div>
-                <div class="col s4 center-align cell cell-0-2" cell-row="0" cell-col="2"></div>
+                <div class="col s4 center-align border-right cell cell-0" cell-row="0" cell-col="0">
+                    {{{ getCellData 0 0 }}}
+                </div>
+                <div class="col s4 center-align border-right cell cell-1" cell-row="0" cell-col="1">
+                    {{{ getCellData 0 1 }}}
+                </div>
+                <div class="col s4 center-align cell cell-2" cell-row="0" cell-col="2">
+                    {{{ getCellData 0 2 }}}
+                </div>
             </div>
 
             <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right cell cell-1-0" cell-row="1" cell-col="0"></div>
-                <div class="col s4 center-align border-right cell cell-1-1" cell-row="1" cell-col="1"></div>
-                <div class="col s4 center-align cell cell-1-2" cell-row="1" cell-col="2"></div>
+                <div class="col s4 center-align border-right cell cell-10" cell-row="1" cell-col="0">
+                    {{{ getCellData 1 0 }}}
+                </div>
+                <div class="col s4 center-align border-right cell cell-11" cell-row="1" cell-col="1">
+                    {{{ getCellData 1 1 }}}
+                </div>
+                <div class="col s4 center-align cell cell-12" cell-row="1" cell-col="2">
+                    {{{ getCellData 1 2 }}}
+                </div>
             </div>
 
             <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right cell cell-2-0" cell-row="2" cell-col="0"></div>
-                <div class="col s4 center-align border-right cell cell-2-1" cell-row="2" cell-col="1"></div>
-                <div class="col s4 center-align cell cell-2-2" cell-row="2" cell-col="2"></div>
+                <div class="col s4 center-align border-right cell cell-20" cell-row="2" cell-col="0">
+                    {{{ getCellData 2 0 }}}
+                </div>
+                <div class="col s4 center-align border-right cell cell-21" cell-row="2" cell-col="1">
+                    {{{ getCellData 2 1 }}}
+                </div>
+                <div class="col s4 center-align cell cell-22" cell-row="2" cell-col="2">
+                    {{{ getCellData 2 2 }}}
+                </div>
+            </div>
+
+            <p class="z-depth-1 white-text deep-orange darken-1 mt20 pa10 mb0" id="game-messages">
+                <span class="game-message versus">{{ gamePlayerName 'one' }} <strong>vs</strong> {{ gamePlayerName 'two' }}</span>
+                <span class="game-message turn-player-one display-none">Player {{ game.playerOne.name }} turn</span>
+                <span class="game-message turn-player-two display-none">Player {{ game.playerTwo.name }} turn</span>
+            </p>
+
+            {{# if not game.status.playerJoined }}
+                <div class="progress mb0 mt0">
+                    <div class="indeterminate"></div>
+                </div>
+            {{/ if }}
+
+            <div class="row mt20 mb0">
+                <div class="col s6 pl0">
+                    <a class="waves-effect waves-light btn btn-block"><i class="material-icons left">replay</i>Restart</a>
+                </div>
+
+                <div class="col s6 pr0">
+                    <a class="waves-effect waves-light btn btn-block"><i class="material-icons left">flag</i>Finish</a>
+                </div>
             </div>
         </div>
 
-        <p>
-
-
-            {{ game.playerOne.name }}
-            {{ game.playerTwo.name }}
-        </p>
-
+        <!-- Chat -->
         <div class="col s12 m3 offset-m1 animate-fade-in display-none tab-content" id="chat">
-            <h3 class="white-text mt0"><i class="material-icons small">chat</i> Chat</h3>
+            <h3 class="white-text mt0 hide-on-small-only"><i class="material-icons small">chat</i> Chat</h3>
 
             <form id="form-game-chat">
                 <div class="row white">
@@ -50,18 +110,14 @@
             </form>
 
             <ul class="collection">
-
                 {{# each gameChat }}
-
                     <li class="collection-item avatar">
                         <i class="material-icons circle">face</i>
 
                         <span class="title">{{ text }}</span>
                         <p>{{ name }}</p>
                     </li>
-
                 {{/ each }}
-
             </ul>
         </div>
     </div>
