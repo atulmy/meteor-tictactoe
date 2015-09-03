@@ -40,12 +40,12 @@ Template.gamePlayFriend.events({
             console.log('gamesInsert');
             console.log(response);
 
-            if(!error && response.success) {
-                Router.go('gamePlay', {gameId: response.gameId});
-                console.log('gamesInsert Success');
+            if(!error) {
+                if(response.success) {
+                    Router.go('gamePlay', {gameId: response.gameId});
+                }
             } else {
-                alert('There was some error, please try again.');
-                console.log('gamesInsert Error');
+                Materialize.toast('There was some error, please try again.', 5000);
             }
         });
     }

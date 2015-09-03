@@ -22,25 +22,24 @@ Meteor.methods({
         }
 
         // create game document
-        var matrix = [
-            [{}, {}, {}],
-            [{}, {}, {}],
-            [{}, {}, {}]
-        ];
-        matrix = JSON.stringify(matrix);
+        var matrix = JSON.stringify(Meteor.call('matrixEmpty'));
+        var playerOne = {
+            id: Meteor.userId(),
+            name: Meteor.user().profile.name,
+            image: 'default.png',
+            ready: false,
+            score: 0,
+            winner: false
+        };
         var game = {
-            playerOne: {
-                id: Meteor.userId(),
-                name: Meteor.user().profile.name,
-                image: 'default.png',
-                ready: false,
-                score: 0,
-                winner: false
-            },
+            players: [playerOne],
 
             ai: ai,
 
-            matrix: matrix,
+            sets: [{
+                number: 1,
+                matrix: matrix
+            }],
 
             chat: {
                 show: true,
@@ -48,7 +47,8 @@ Meteor.methods({
             },
 
             status: {
-                playerJoined: false
+                playerJoined: false,
+                turn: 0
             },
 
             is: {
@@ -116,8 +116,16 @@ Meteor.methods({
                 score: 0,
                 winner: false
             };
+            game.players.push(playerTwo);
 
-            var result = Games.update(game._id, {$set: {"playerTwo": playerTwo, "is.playing": true, "status.playerJoined": true}});
+            console.log(game.players);
+
+            var result = Games.update(game._id, {$set: {
+                players: game.players,
+                "is.playing": true,
+                "status.playerJoined": true
+            }});
+
             if (result) {
                 response.success = true;
                 response.message = 'Done.';
@@ -141,14 +149,56 @@ Meteor.methods({
 
         var game = Games.findOne(gameId);
         if(game) {
-            var matrix = JSON.parse(game.matrix);
-            matrix[cellRow][cellCol] = {
+            var matrixJSON = JSON.parse(game.sets[(game.sets.length - 1)].matrix);
+            console.log(matrixJSON);
+            matrixJSON[cellRow][cellCol] = {
                 selection: "x",
-                player: "one"
+                player: game.status.turn
             };
-            matrix = JSON.stringify(matrix);
+            game.sets[(game.sets.length - 1)].matrix = JSON.stringify(matrixJSON);
 
-            var result = Games.update(game._id, {$set: {matrix: matrix}});
+            var nextTurn = (game.status.turn === 0) ? 1 : 0;
+
+            var result = Games.update(game._id, {$set: {sets: game.sets, "status.turn": nextTurn}});
+            if (result) {
+                response.success = true;
+                response.message = 'Done.';
+            }
+        }
+
+        //response.setFinished = true; // @temp
+
+        return response;
+    },
+
+    'gameSetFinished': function(gameId) {
+        var response = {
+            success: false,
+            message: 'There was some error. Please try again.',
+            setFinished: false
+        };
+
+        var game = Games.findOne(gameId);
+        if(game) {
+            var sets = game.sets;
+
+            // Set winner
+            sets[(sets.length - 1)].result = {
+                winner: 'Atul Yadav',
+                using: 'X'
+            };
+
+            // Create new set
+            var matrix = JSON.stringify(Meteor.call('matrixEmpty'));
+            var set = {
+                number: (sets.length + 1),
+                matrix: matrix
+            };
+            sets.push(set);
+
+            console.log(sets);
+
+            var result = Games.update(game._id, {$set: {sets: sets}});
             if (result) {
                 response.success = true;
                 response.message = 'Done.';

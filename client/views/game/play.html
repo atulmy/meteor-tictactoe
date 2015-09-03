@@ -12,24 +12,32 @@
 
         <!-- Sets -->
         <div class="col s12 m3 animate-fade-in display-none tab-content" id="sets">
-            <h3 class="white-text mt0 hide-on-small-only"><i class="material-icons small">format_list_numbered</i> Sets</h3>
+            <h4 class="white-text mt0 hide-on-small-only"><i class="material-icons small left mt5 mr5">format_list_numbered</i> Sets</h4>
 
             <ul class="collection">
-                <li class="collection-item avatar">
-                    <i class="circle green">1</i>
-                    <span class="title">Atul Yadav</span>
-                    <p>Using X</p>
-                </li>
-                <li class="collection-item avatar">
-                    <i class="circle green">2</i>
-                    <span class="title">Foo Bar</span>
-                    <p>Using O</p>
-                </li>
-                <li class="collection-item avatar">
-                    <i class="circle green">3</i>
-                    <span class="title">Foo Bar</span>
-                    <p>Using O</p>
-                </li>
+                {{# each gameSets }}
+                    <li class="collection-item avatar">
+                        <i class="circle green">{{ number }}</i>
+                        <span class="title">
+                            {{# if result }}
+                                {{ result.winner }}
+                            {{ else }}
+                                {{# if game.is.playing }}
+                                    In progress!
+                                {{ else }}
+                                    The game has not started yet
+                                {{/ if }}
+                            {{/ if }}
+                        </span>
+                        <p>
+                            {{# if result }}
+                                Using {{ result.using }}
+                            {{ else }}
+                                ...
+                            {{/ if }}
+                        </p>
+                    </li>
+                {{/ each }}
             </ul>
         </div>
 
@@ -72,9 +80,9 @@
             </div>
 
             <p class="z-depth-1 white-text deep-orange darken-1 mt20 pa10 mb0" id="game-messages">
-                <span class="game-message versus">{{ gamePlayerName 'one' }} <strong>vs</strong> {{ gamePlayerName 'two' }}</span>
-                <span class="game-message turn-player-one display-none">Player {{ game.playerOne.name }} turn</span>
-                <span class="game-message turn-player-two display-none">Player {{ game.playerTwo.name }} turn</span>
+                <span class="game-message versus">{{ gamePlayerName 0 }} <strong>vs</strong> {{ gamePlayerName 1 }}</span>
+                <span class="game-message turn-player-0 display-none">Player {{ gamePlayerName 0 }} turn</span>
+                <span class="game-message turn-player-1 display-none">Player {{ gamePlayerName 1 }} turn</span>
             </p>
 
             {{# if not game.status.playerJoined }}
@@ -96,7 +104,7 @@
 
         <!-- Chat -->
         <div class="col s12 m3 offset-m1 animate-fade-in display-none tab-content" id="chat">
-            <h3 class="white-text mt0 hide-on-small-only"><i class="material-icons small">chat</i> Chat</h3>
+            <h4 class="white-text mt0 hide-on-small-only"><i class="material-icons small left mt5 mr5">chat</i> Chat</h4>
 
             <form id="form-game-chat">
                 <div class="row white">

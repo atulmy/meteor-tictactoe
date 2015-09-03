@@ -66,8 +66,18 @@
     });
 
 // sets
+    var result = new SimpleSchema({
+        winner: {
+            type: String
+        },
+
+        using: {
+            type: String
+        }
+    });
+
     var set = new SimpleSchema({
-        setNumber: {
+        number: {
             type: Number
         },
 
@@ -76,7 +86,7 @@
         },
 
         result: {
-            type: String,
+            type: result,
             optional: true
         }
     });
@@ -85,18 +95,17 @@
     var status = new SimpleSchema({
         playerJoined: {
             type: Boolean
+        },
+
+        turn: {
+            type: Number
         }
     });
 
 // Games
 Games.attachSchema(new SimpleSchema({
-    playerOne: {
-        type: playerInfo
-    },
-
-    playerTwo: {
-        type: playerInfo,
-        optional: true
+    players: {
+        type: [playerInfo]
     },
 
     ai: {

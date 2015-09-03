@@ -15,10 +15,15 @@ Template.gamePlay.helpers({
         return game.chat.conversation.reverse();
     },
 
+    gameSets: function() {
+        var game = Games.findOne({_id: Session.get('gameId')});
+        return game.sets.reverse();
+    },
+
     getCellData: function(row, col) {
         var game = Games.findOne({_id: Session.get('gameId')});
         if(game) {
-            var matrix = JSON.parse(game.matrix);
+            var matrix = JSON.parse(game.sets[(game.sets.length - 1)].matrix);
             if(matrix[row][col] !== 'undefined') {
                 if(matrix[row][col].selection === 'x') {
                     return '<i class="material-icons large">close</i>';
@@ -34,10 +39,10 @@ Template.gamePlay.helpers({
         var playerName = 'Player';
         var game = Games.findOne({_id: Session.get('gameId')});
         if(game) {
-            if(player === 'one') {
-                playerName = game.playerOne.name;
-            } else if(player === 'two') {
-                playerName = (typeof game.playerTwo !== 'undefined') ? game.playerTwo.name : '(Waiting for player...)';
+            if(player === 0) {
+                playerName = game.players[0].name;
+            } else if(player === 1) {
+                playerName = (typeof game.players[1] !== 'undefined') ? game.players[1].name : '(Waiting for player...)';
             }
         }
         return playerName;
@@ -66,7 +71,7 @@ Template.gamePlay.events({
                 if (!error) {
                     template.$('#form-game-chat-text').val('');
                 } else {
-                    alert('There was some error, please try again.');
+                    Materialize.toast('There was some error, please try again.', 5000);
                 }
 
                 template.$('#form-game-chat-send').removeAttr('disabled');
@@ -82,17 +87,38 @@ Template.gamePlay.events({
 
         var game = Games.findOne({_id: Session.get('gameId')});
         if (game) {
-            var cellRow = parseInt(template.$(event.currentTarget).attr('cell-row'));
-            var cellCol = parseInt(template.$(event.currentTarget).attr('cell-col'));
-            console.log(cellRow + ' ' + cellCol);
+            if(game.is.playing) {
+                Meteor.call('isCurrentPlayersTurn', game, function(error, response) {
+                    if(response) {
+                        var cellRow = parseInt(template.$(event.currentTarget).attr('cell-row'));
+                        var cellCol = parseInt(template.$(event.currentTarget).attr('cell-col'));
+                        console.log(cellRow + ' ' + cellCol);
 
-            var player = 'one';
-            var selection = 'x';
+                        var player = 'one';
+                        var selection = 'x';
 
-            Meteor.call('gameSelectMatrixCell', game._id, cellRow, cellCol, player, selection, function (error, response) {
-                console.log('gameSelectMatrixCell');
-                console.log(response);
-            });
+                        Meteor.call('gameSelectMatrixCell', game._id, cellRow, cellCol, player, selection, function (error, response) {
+                            console.log('gameSelectMatrixCell');
+                            console.log(response);
+
+                            if (!error) {
+                                if (response.success && response.setFinished) {
+                                    Meteor.call('gameSetFinished', game._id, function (error, response) {
+                                        console.log('gameSetFinished');
+                                        console.log(response);
+                                    });
+                                }
+                            } else {
+                                Materialize.toast('There was some error, please try again.', 5000);
+                            }
+                        });
+                    } else {
+                        Materialize.toast('Its not your turn yet.', 3000);
+                    }
+                });
+            } else {
+                Materialize.toast('The game has not started yet.', 3000);
+            }
         }
     }
 
@@ -105,10 +131,16 @@ Template.gamePlay.rendered = function() {
     var game = Games.findOne({_id: Session.get('gameId')});
     if(game) {
         // Set second player
-        if(typeof game.playerTwo === 'undefined' && game.playerOne.id !== Meteor.userId()) {
+        if(typeof game.players[1] === 'undefined' && game.players[0].id !== Meteor.userId()) {
             Meteor.call('gamePlayerJoined', game._id, function(error, response) {
                 console.log('gamePlayerJoined');
                 console.log(response);
+
+                if(!error) {
+
+                } else {
+                    Materialize.toast('There was some error, please try again.', 5000);
+                }
             });
         }
 

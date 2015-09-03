@@ -5,6 +5,8 @@ html, body {
 .border-top { border-top: 8px solid #455a64; }
 .border-right { border-right: 8px solid #455a64; }
 .mt0 { margin-top: 0px; }
+.mt5 { margin-top: 5px; }
+.mr5 { margin-right: 5px !important; }
 .mt10 { margin-top: 10px; }
 .mt20 { margin-top: 20px; }
 .mb0 { margin-bottom: 0px; }
@@ -50,6 +52,11 @@ header .button-collapse { display: inline-block; }
 }
 #matrix .cell .material-icons {
     margin: 0px auto;
+    transition: all 0.5s ease;
+}
+#matrix .cell .material-icons.active {
+    color: #ff9800;
+    font-size: 7rem;
 }
 /* --------------------- / content --------------------- */
 
@@ -71,6 +78,9 @@ header .button-collapse { display: inline-block; }
     background-color: #fff;
     color: #ff5722;
 }
+#chat .collection .collection-item p, #sets .collection .collection-item p {
+    color: #666;
+}
 /*
 .collection-item h5, .collection-item p {
     margin: 0px;
@@ -88,5 +98,18 @@ header .button-collapse { display: inline-block; }
     .tab-content {
         display: block !important;
     }
+    #sets .collection {
+        max-height: 470px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin-bottom: 0px;
+    }
+    #chat .collection {
+        max-height: 300px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        margin-bottom: 0px;
+    }
+
 }
 /* --------------------- / Responsive Fixes --------------------- */
