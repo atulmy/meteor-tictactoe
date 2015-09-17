@@ -44,13 +44,13 @@
         <!-- Matrix -->
         <div class="col s12 m4 offset-m1 center-align tab-content" id="matrix">
             <div class="row mb0">
-                <div class="col s4 center-align border-right cell cell-0" cell-row="0" cell-col="0">
+                <div class="col s4 center-align border-right cell cell-0 cell-00" cell-row="0" cell-col="0">
                     {{{ getCellData 0 0 }}}
                 </div>
-                <div class="col s4 center-align border-right cell cell-1" cell-row="0" cell-col="1">
+                <div class="col s4 center-align border-right cell cell-1 cell-01" cell-row="0" cell-col="1">
                     {{{ getCellData 0 1 }}}
                 </div>
-                <div class="col s4 center-align cell cell-2" cell-row="0" cell-col="2">
+                <div class="col s4 center-align cell cell-2 cell-02" cell-row="0" cell-col="2">
                     {{{ getCellData 0 2 }}}
                 </div>
             </div>
@@ -81,8 +81,10 @@
 
             <p class="z-depth-1 white-text deep-orange darken-1 mt20 pa10 mb0" id="game-messages">
                 <span class="game-message versus">{{ gamePlayerName 0 }} <strong>vs</strong> {{ gamePlayerName 1 }}</span>
-                <span class="game-message turn-player-0 display-none">Player {{ gamePlayerName 0 }} turn</span>
-                <span class="game-message turn-player-1 display-none">Player {{ gamePlayerName 1 }} turn</span>
+                {{# if game.is.playing }}
+                    &bull;
+                    <span class="game-message turn-player">{{ gamePlayerName game.status.turn }}'s turn</span>
+                {{/ if }}
             </p>
 
             {{# if not game.status.playerJoined }}
@@ -93,11 +95,11 @@
 
             <div class="row mt20 mb0">
                 <div class="col s6 pl0">
-                    <a class="waves-effect waves-light btn btn-block"><i class="material-icons left">replay</i>Restart</a>
+                    <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-restart-set"><i class="material-icons left">replay</i>Restart Set</a>
                 </div>
 
                 <div class="col s6 pr0">
-                    <a class="waves-effect waves-light btn btn-block"><i class="material-icons left">flag</i>Finish</a>
+                    <a class="waves-effect waves-light btn btn-block"><i class="material-icons left">flag</i>Finish Game</a>
                 </div>
             </div>
         </div>
@@ -127,6 +129,22 @@
                     </li>
                 {{/ each }}
             </ul>
+        </div>
+    </div>
+
+    <div class="display-none">
+        {{ gameHighlightCells }}
+    </div>
+
+    <div id="modal-restart-set" class="modal">
+        <div class="modal-content">
+            <h4>Are you sure?</h4>
+            <p>This will restart the current game set, Okay?</p>
+            <p>Caution: The other player may get pissed on you if winning. </p>
+        </div>
+        <div class="modal-footer">
+            <a href="javascript:void(0);" class="modal-action waves-effect waves-green btn-flat" id="restart-set-okay">Yes</a>
+            <a href="javascript:void(0);" class="modal-action modal-close waves-effect waves-green btn-flat">No</a>
         </div>
     </div>
 

@@ -77,11 +77,19 @@
     });
 
     var set = new SimpleSchema({
+        piece: {
+            type: [String]
+        },
+
         number: {
             type: Number
         },
 
         matrix: {
+            type: String
+        },
+
+        highlightCells: {
             type: String
         },
 

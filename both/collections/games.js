@@ -37,8 +37,10 @@ Meteor.methods({
             ai: ai,
 
             sets: [{
+                piece: ['x', 'o'],
                 number: 1,
-                matrix: matrix
+                matrix: matrix,
+                highlightCells: JSON.stringify([])
             }],
 
             chat: {
@@ -118,8 +120,6 @@ Meteor.methods({
             };
             game.players.push(playerTwo);
 
-            console.log(game.players);
-
             var result = Games.update(game._id, {$set: {
                 players: game.players,
                 "is.playing": true,
@@ -135,10 +135,11 @@ Meteor.methods({
         return response;
     },
 
-    'gameSelectMatrixCell': function(gameId, cellRow, cellCol, player, selection) {
+    'gameSelectMatrixCell': function(gameId, cellRow, cellCol) {
         var response = {
             success: false,
-            message: 'There was some error. Please try again.'
+            message: 'There was some error. Please try again.',
+            setFinished: false
         };
 
         // check user signed in
@@ -149,24 +150,134 @@ Meteor.methods({
 
         var game = Games.findOne(gameId);
         if(game) {
-            var matrixJSON = JSON.parse(game.sets[(game.sets.length - 1)].matrix);
-            console.log(matrixJSON);
-            matrixJSON[cellRow][cellCol] = {
-                selection: "x",
-                player: game.status.turn
-            };
-            game.sets[(game.sets.length - 1)].matrix = JSON.stringify(matrixJSON);
+            var currentSet = game.sets[(game.sets.length - 1)];
 
-            var nextTurn = (game.status.turn === 0) ? 1 : 0;
+            var matrixJSON = JSON.parse(currentSet.matrix);
 
-            var result = Games.update(game._id, {$set: {sets: game.sets, "status.turn": nextTurn}});
-            if (result) {
-                response.success = true;
-                response.message = 'Done.';
+            if(typeof matrixJSON[cellRow][cellCol].selection === 'undefined') {
+
+                // Which piece
+                if (game.players[0].id === Meteor.userId()) {
+                    var player = 0;
+                    var selection = currentSet.piece[0];
+                } else if (game.players[1].id === Meteor.userId()) {
+                    player = 1;
+                    selection = currentSet.piece[1];
+                }
+
+                matrixJSON[cellRow][cellCol] = {
+                    selection: selection,
+                    player: player
+                };
+
+                // check for winner
+                // horizontal possibilities
+                var won = false;
+                var highlightCells = [];
+                for(var i = 0; i <= 2; i++) {
+                    if(!won) {
+                        highlightCells = [];
+                        var thisRow = true;
+                        for (var j = 0; j <= 2; j++) {
+                            if (matrixJSON[i][j].selection != selection) {
+                                thisRow = false;
+                            } else {
+                                highlightCells.push({'r': i, 'c': j});
+                            }
+                        }
+                        if (thisRow) {
+                            won = true;
+                        }
+                    }
+                }
+                console.log('horizontal '+won);
+                if(!won) {
+                    // vertical possibilities
+                    for(var i = 0; i <= 2; i++) {
+                        if(!won) {
+                            highlightCells = [];
+                            var thisCol = true;
+                            for (var j = 0; j <= 2; j++) {
+                                if (matrixJSON[j][i].selection != selection) {
+                                    thisCol = false;
+                                } else {
+                                    highlightCells.push({'r': j, 'c': i});
+                                }
+                            }
+                            if (thisCol) {
+                                won = true;
+                            }
+                        }
+                    }
+                    console.log('vertical '+won);
+                    if(!won) {
+                        // diagonal possibilities: \
+                        highlightCells = [];
+                        var thisDiagonal = true;
+                        for(var i = 0; i <= 2; i++) {
+                            if(matrixJSON[i][i].selection != selection) {
+                                thisDiagonal = false;
+                            } else {
+                                highlightCells.push({'r': i, 'c': i});
+                            }
+                        }
+                        if(thisDiagonal) {
+                            won = true;
+                        }
+                        console.log('diagonal \\ '+won);
+                        if(!won) {
+                            // diagonal possibilities: /
+                            highlightCells = [];
+                            var thisDiagonal = true;
+                            var j = 2;
+                            for(var i = 0; i <= 2; i++) {
+                                if(matrixJSON[i][j].selection != selection) {
+                                    thisDiagonal = false;
+                                } else {
+                                    highlightCells.push({'r': i, 'c': j});
+                                }
+                                j--;
+                            }
+                            if(thisDiagonal) {
+                                won = true;
+                            }
+                            console.log('diagonal / '+won);
+                        }
+                    }
+                }
+                console.log('won '+won);
+                console.log('highlightCells');
+                console.log(highlightCells);
+
+                // check if all cells are filled
+                var completed = true;
+                if(!won) {
+                    highlightCells = [];
+                    matrixJSON.forEach(function (rowData, rowKey) {
+                        rowData.forEach(function (colData, colKey) {
+                            if (_.isEmpty(colData)) {
+                                completed = false;
+                            }
+                        });
+                    });
+                }
+
+                game.sets[(game.sets.length - 1)].matrix = JSON.stringify(matrixJSON);
+                game.sets[(game.sets.length - 1)].highlightCells = JSON.stringify(highlightCells);
+
+                var nextTurn = (game.status.turn === 0) ? 1 : 0;
+
+                var result = Games.update(game._id, {$set: {sets: game.sets, "status.turn": nextTurn}});
+                if (result) {
+                    response.success = true;
+                    response.message = 'Done.';
+                }
+
+                if (completed) {
+                    response.setFinished = true;
+                }
             }
         }
-
-        //response.setFinished = true; // @temp
 
         return response;
     },
@@ -180,29 +291,61 @@ Meteor.methods({
 
         var game = Games.findOne(gameId);
         if(game) {
+            // Add new set
             var sets = game.sets;
 
             // Set winner
+            var winnerKey = (game.status.turn === 1) ? 0 : 1;
             sets[(sets.length - 1)].result = {
-                winner: 'Atul Yadav',
-                using: 'X'
+                winner: game.players[winnerKey].name,
+                using: sets[(sets.length - 1)].piece[winnerKey]
             };
+
+            var piece = (game.status.turn === 1) ? ['o', 'x'] : ['x', 'o'];
 
             // Create new set
             var matrix = JSON.stringify(Meteor.call('matrixEmpty'));
             var set = {
+                piece: piece,
                 number: (sets.length + 1),
-                matrix: matrix
+                matrix: matrix,
+                highlightCells: JSON.stringify([])
             };
             sets.push(set);
-
-            console.log(sets);
 
             var result = Games.update(game._id, {$set: {sets: sets}});
             if (result) {
                 response.success = true;
                 response.message = 'Done.';
             }
+        }
+
+        return response;
+    },
+
+    'gameRestartCurrentSet': function(gameId) {
+        var response = {
+            success: false,
+            message: 'There was some error. Please try again.',
+            setFinished: false
+        };
+
+        var game = Games.findOne(gameId);
+        if(game) {
+            var sets = game.sets;
+
+            sets[(sets.length - 1)].matrix = JSON.stringify(Meteor.call('matrixEmpty'));
+            sets[(sets.length - 1)].highlightCells = JSON.stringify([]);
+
+            Meteor.call('nextSetPlayerKey', sets, function(error, turn) {
+                if(!error) {
+                    var result = Games.update(game._id, {$set: {sets: sets, "status.turn": turn}});
+                    if (result) {
+                        response.success = true;
+                        response.message = 'Done.';
+                    }
+                }
+            });
         }
 
         return response;

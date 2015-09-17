@@ -1,6 +1,9 @@
 // common functions
 Meteor.methods({
 
+// Common
+
+    // Empty Matrix
     matrixEmpty: function() {
         var matrix = [
             [{}, {}, {}],
@@ -10,6 +13,40 @@ Meteor.methods({
         return matrix;
     },
 
+    // Show error message
+    errorServer: function() {
+        if (Meteor.isClient) {
+            Materialize.toast('There was some error, please try again.', 5000);
+            return true;
+        }
+        return false;
+    },
+
+    // HTML5 Browser notifications
+    browserNotificationShow: function(message) {
+        if (Meteor.isClient && 'Notification' in window) {
+            Notification.requestPermission(function (message) {
+                console.log(message);
+                var notification = new Notification(
+                    "Rock Paper Scissors",
+                    {
+                        body: message,
+                        icon: 'http://localhost:3000/images/favicon.png'
+                    }
+                );
+                setTimeout(function () {
+                    notification.close();
+                }, 5000);
+            });
+            return true;
+        }
+        return false;
+    },
+
+
+// Game
+
+    // Check if current players turn
     isCurrentPlayersTurn: function(game) {
         console.log(game.players[0].id)
         console.log(Meteor.userId());
@@ -21,23 +58,8 @@ Meteor.methods({
         return false;
     },
 
-    // HTML5 Browser notifications
-    browserNotificationShow: function(message) {
-        if('Notification' in window) {
-            Notification.requestPermission(function(message) {
-                console.log(message);
-                var notification = new Notification(
-                    "Rock Paper Scissors",
-                    {
-                        body: message,
-                        icon: 'http://localhost:3000/images/favicon.png'
-                    }
-                );
-                setTimeout(function(){
-                    notification.close();
-                }, 5000);
-            });
-        }
+    nextSetPlayerKey: function(sets) {
+        return (sets.length - 1) % 2;
     }
 
 });

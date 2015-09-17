@@ -11,13 +11,35 @@ Template.gamePlay.helpers({
     },
 
     gameChat: function() {
+        var chatConversation = [];
         var game = Games.findOne({_id: Session.get('gameId')});
-        return game.chat.conversation.reverse();
+        if(game) {
+            chatConversation = game.chat.conversation.reverse()
+        }
+        return chatConversation;
     },
 
     gameSets: function() {
+        var sets = [];
         var game = Games.findOne({_id: Session.get('gameId')});
-        return game.sets.reverse();
+        if(game) {
+            sets = game.sets.reverse();
+        }
+        return sets;
+    },
+
+    gameHighlightCells: function() {
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if(game) {
+            var highlightCells = game.sets[(game.sets.length - 1)].highlightCells;
+            if(highlightCells.length > 0) {
+                highlightCells = JSON.parse(highlightCells);
+                highlightCells.forEach(function (rowData) {
+                    $('.cell-' + rowData.r + rowData.c).find('i').addClass('pulse');
+                });
+            }
+        }
+        return game.sets[(game.sets.length - 1)].highlightCells;
     },
 
     getCellData: function(row, col) {
@@ -64,18 +86,50 @@ Template.gamePlay.events({
 
             var text = template.$('#form-game-chat-text').val();
 
-            Meteor.call('gameUpdateChatConversation', game._id, text, function (error, response) {
-                console.log('gameUpdateChatConversation');
-                console.log(response);
+            if(text.length > 0) {
 
-                if (!error) {
-                    template.$('#form-game-chat-text').val('');
-                } else {
-                    Materialize.toast('There was some error, please try again.', 5000);
-                }
+                Meteor.call('gameUpdateChatConversation', game._id, text, function (error, response) {
+                    console.log('gameUpdateChatConversation');
+                    console.log(response);
 
+                    if (!error) {
+                        template.$('#form-game-chat-text').val('');
+                    } else {
+                        Meteor.call('errorServer');
+                    }
+
+                    template.$('#form-game-chat-send').removeAttr('disabled');
+                });
+            } else {
+                Materialize.toast('You did not enter any text.', 5000);
                 template.$('#form-game-chat-send').removeAttr('disabled');
-            });
+            }
+        }
+    },
+
+    'click #restart-set-okay': function(event, template) {
+        event.preventDefault();
+
+        console.log('click #restart-set-okay');
+
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if (game) {
+            if (game.is.playing) {
+                Meteor.call('gameRestartCurrentSet', game._id, function(error, response) {
+                    console.log('gameRestartCurrentSet');
+
+                    if (!error) {
+                        if(response.success) {
+                            $('#modal-restart-set').closeModal();
+                            Materialize.toast('Current game set has been reset.', 5000);
+                        } else {
+                            Meteor.call('errorServer');
+                        }
+                    } else {
+                        Meteor.call('errorServer');
+                    }
+                });
+            }
         }
     },
 
@@ -94,22 +148,21 @@ Template.gamePlay.events({
                         var cellCol = parseInt(template.$(event.currentTarget).attr('cell-col'));
                         console.log(cellRow + ' ' + cellCol);
 
-                        var player = 'one';
-                        var selection = 'x';
-
-                        Meteor.call('gameSelectMatrixCell', game._id, cellRow, cellCol, player, selection, function (error, response) {
+                        Meteor.call('gameSelectMatrixCell', game._id, cellRow, cellCol, function (error, response) {
                             console.log('gameSelectMatrixCell');
                             console.log(response);
 
                             if (!error) {
                                 if (response.success && response.setFinished) {
-                                    Meteor.call('gameSetFinished', game._id, function (error, response) {
-                                        console.log('gameSetFinished');
-                                        console.log(response);
-                                    });
+                                    Meteor.setTimeout(function() {
+                                        Meteor.call('gameSetFinished', game._id, function (error, response) {
+                                            console.log('gameSetFinished');
+                                            console.log(response);
+                                        });
+                                    }, 3000);
                                 }
                             } else {
-                                Materialize.toast('There was some error, please try again.', 5000);
+                                Meteor.call('errorServer');
                             }
                         });
                     } else {
@@ -139,7 +192,7 @@ Template.gamePlay.rendered = function() {
                 if(!error) {
 
                 } else {
-                    Materialize.toast('There was some error, please try again.', 5000);
+                    Meteor.call('errorServer');
                 }
             });
         }
@@ -170,5 +223,8 @@ Template.gamePlay.rendered = function() {
 
         // Tabs
         $('ul.tabs').tabs();
+
+        // Modal
+        $('.modal-trigger').leanModal();
     });
 };
