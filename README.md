@@ -2,7 +2,7 @@
 
 Expected release: Very soon.
 
-# Tic Tac Toe (aka X and Zeroes)
+# Tic Tac Toe (aka Xs and 0s)
 
 - Play your all time favourite game Tic Tac Toe online with your friends or with computer.
 

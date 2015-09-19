@@ -301,6 +301,20 @@ Meteor.methods({
                 using: sets[(sets.length - 1)].piece[winnerKey]
             };
 
+            var players = game.players;
+            players[winnerKey].score = players[winnerKey].score + 1;
+
+            if(players[0].score === players[1].score) {
+                players[0].winner = false;
+                players[1].winner = false;
+            } else if(players[0].score > players[1].score) {
+                players[0].winner = true;
+                players[1].winner = false;
+            } else {
+                players[1].winner = true;
+                players[0].winner = false;
+            }
+
             var piece = (game.status.turn === 1) ? ['o', 'x'] : ['x', 'o'];
 
             // Create new set
@@ -313,7 +327,7 @@ Meteor.methods({
             };
             sets.push(set);
 
-            var result = Games.update(game._id, {$set: {sets: sets}});
+            var result = Games.update(game._id, {$set: {sets: sets, players: players}});
             if (result) {
                 response.success = true;
                 response.message = 'Done.';

@@ -80,12 +80,35 @@
             </div>
 
             <p class="z-depth-1 white-text deep-orange darken-1 mt20 pa10 mb0" id="game-messages">
-                <span class="game-message versus">{{ gamePlayerName 0 }} <strong>vs</strong> {{ gamePlayerName 1 }}</span>
                 {{# if game.is.playing }}
-                    &bull;
-                    <span class="game-message turn-player">{{ gamePlayerName game.status.turn }}'s turn</span>
+                    <span class="game-message player-turn-message">
+                        {{ gamePlayerName game.status.turn }}'s turn
+                    </span>
                 {{/ if }}
+
+                <span class="game-message player-versus-message">
+                    <span class="left">
+                        {{# if game.is.playing }}
+                            <strong>{{ game.players.[0].score }}</strong> &bull;
+                        {{/ if }}
+
+                        {{ gamePlayerName 0 }}
+                    </span>
+                    <span><strong>vs</strong></span>
+                    <span class="right">
+                        {{ gamePlayerName 1 }}
+                        {{# if game.is.playing }}
+                            <strong>&bull; {{ game.players.[1].score }}</strong>
+                        {{/ if }}
+                    </span>
+                </span>
             </p>
+
+            {{# if game.is.playing }}
+                <script>
+
+                </script>
+            {{/ if }}
 
             {{# if not game.status.playerJoined }}
                 <div class="progress mb0 mt0">

@@ -1,3 +1,5 @@
+var interval;
+
 // Route Configurations
 Router.configure({
     layoutTemplate: 'layoutDefault',
@@ -59,5 +61,8 @@ Router.plugin('ensureSignedIn', {
         },
         onStop: function() {
             Session.set('gameId', '');
+            if(typeof interval != 'undefined') {
+                interval.clearInterval();
+            }
         }
     });

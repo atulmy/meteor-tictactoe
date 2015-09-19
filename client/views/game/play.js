@@ -29,6 +29,7 @@ Template.gamePlay.helpers({
     },
 
     gameHighlightCells: function() {
+        var highlightCells = {};
         var game = Games.findOne({_id: Session.get('gameId')});
         if(game) {
             var highlightCells = game.sets[(game.sets.length - 1)].highlightCells;
@@ -38,8 +39,9 @@ Template.gamePlay.helpers({
                     $('.cell-' + rowData.r + rowData.c).find('i').addClass('pulse');
                 });
             }
+            highlightCells = game.sets[(game.sets.length - 1)].highlightCells;
         }
-        return game.sets[(game.sets.length - 1)].highlightCells;
+        return highlightCells;
     },
 
     getCellData: function(row, col) {
@@ -226,5 +228,23 @@ Template.gamePlay.rendered = function() {
 
         // Modal
         $('.modal-trigger').leanModal();
+
+        var i = 0;
+        interval = setInterval(function() {
+            if($('.player-turn-message').length) {
+                console.log('in');
+                if (i === 0) {
+                    $('.player-versus-message').hide();
+                    $('.player-turn-message').fadeIn();
+                    i = 1;
+                    console.log(1);
+                } else {
+                    $('.player-turn-message').hide();
+                    $('.player-versus-message').fadeIn();
+                    i = 0;
+                    console.log(0);
+                }
+            }
+        }, 5000);
     });
 };
