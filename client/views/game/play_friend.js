@@ -8,23 +8,7 @@ Template.gamePlayFriend.helpers({
 
     gamesOnlineCount: function() {
         return Games.find({}, {sort: {createdAt: -1}}).count();
-    },
-
-    /*
-    gamesOnlineCountRefresh: function() {
-        var onlineGamesCountSession = isNaN(Session.get('onlineGamesCount')) ? 0 : Session.get('onlineGamesCount');
-        var onlineGamesCountDb = Games.find({}, {sort: {createdAt: -1}}).count();
-        console.log(onlineGamesCountDb+' '+onlineGamesCountSession);
-        if(onlineGamesCountSession != onlineGamesCountDb) {
-            onlineGamesCountSession = onlineGamesCountDb;
-            Session.set('onlineGamesCount', onlineGamesCountSession);
-            Meteor.setTimeout(function () {
-                Materialize.showStaggeredList('#staggered-test');
-            }, 100);
-        }
-        return onlineGamesCountSession;
     }
-    */
 });
 
 // Events
@@ -36,7 +20,7 @@ Template.gamePlayFriend.events({
         var gameType = 'friend';
         var isPublic = true;
 
-        Meteor.call('gamesInsert', gameType, isPublic, function (error, response) {
+        Meteor.call('gamesInsert', gameType, isPublic, 0, function (error, response) {
             console.log('gamesInsert');
             console.log(response);
 

@@ -22,16 +22,20 @@
                             {{# if result }}
                                 {{ result.winner }}
                             {{ else }}
-                                {{# if game.is.playing }}
-                                    In progress!
+                                {{# if not game.is.completed }}
+                                    {{# if game.is.playing }}
+                                        In progress!
+                                    {{ else }}
+                                        The game has not started yet
+                                    {{/ if }}
                                 {{ else }}
-                                    The game has not started yet
+                                    The game ended.
                                 {{/ if }}
                             {{/ if }}
                         </span>
                         <p>
                             {{# if result }}
-                                Using {{ result.using }}
+                                using <strong>{{ result.using }}</strong>
                             {{ else }}
                                 ...
                             {{/ if }}
@@ -43,71 +47,97 @@
 
         <!-- Matrix -->
         <div class="col s12 m4 offset-m1 center-align tab-content" id="matrix">
-            <div class="row mb0">
-                <div class="col s4 center-align border-right cell cell-0 cell-00" cell-row="0" cell-col="0">
-                    {{{ getCellData 0 0 }}}
+            {{# if game.is.completed }}
+                <div class="row">
+                    <div class="col s6 pl0">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="{{ gameUserImage 0 }}">
+                                <span class="card-title">{{ game.players.[0].name }}</span>
+                            </div>
+                            <div class="card-content">
+                                <p>Score: {{ game.players.[0].score }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s6 pr0">
+                        <div class="card">
+                            <div class="card-image">
+                                <img src="{{ gameUserImage 1 }}">
+                                <span class="card-title">{{ game.players.[1].name }}</span>
+                            </div>
+                            <div class="card-content">
+                                <p>Score: {{ game.players.[1].score }}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col s4 center-align border-right cell cell-1 cell-01" cell-row="0" cell-col="1">
-                    {{{ getCellData 0 1 }}}
-                </div>
-                <div class="col s4 center-align cell cell-2 cell-02" cell-row="0" cell-col="2">
-                    {{{ getCellData 0 2 }}}
-                </div>
-            </div>
 
-            <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right cell cell-10" cell-row="1" cell-col="0">
-                    {{{ getCellData 1 0 }}}
+                <p class="z-depth-1 white-text deep-orange darken-1 mt20 pa10 mb0">
+                    {{ gameWinnerName }}
+                </p>
+            {{ else }}
+                <div class="row mb0">
+                    <div class="col s4 center-align border-right cell cell-0 cell-00" cell-row="0" cell-col="0">
+                        {{{ getCellData 0 0 }}}
+                    </div>
+                    <div class="col s4 center-align border-right cell cell-1 cell-01" cell-row="0" cell-col="1">
+                        {{{ getCellData 0 1 }}}
+                    </div>
+                    <div class="col s4 center-align cell cell-2 cell-02" cell-row="0" cell-col="2">
+                        {{{ getCellData 0 2 }}}
+                    </div>
                 </div>
-                <div class="col s4 center-align border-right cell cell-11" cell-row="1" cell-col="1">
-                    {{{ getCellData 1 1 }}}
-                </div>
-                <div class="col s4 center-align cell cell-12" cell-row="1" cell-col="2">
-                    {{{ getCellData 1 2 }}}
-                </div>
-            </div>
 
-            <div class="row mb0 border-top">
-                <div class="col s4 center-align border-right cell cell-20" cell-row="2" cell-col="0">
-                    {{{ getCellData 2 0 }}}
+                <div class="row mb0 border-top">
+                    <div class="col s4 center-align border-right cell cell-10" cell-row="1" cell-col="0">
+                        {{{ getCellData 1 0 }}}
+                    </div>
+                    <div class="col s4 center-align border-right cell cell-11" cell-row="1" cell-col="1">
+                        {{{ getCellData 1 1 }}}
+                    </div>
+                    <div class="col s4 center-align cell cell-12" cell-row="1" cell-col="2">
+                        {{{ getCellData 1 2 }}}
+                    </div>
                 </div>
-                <div class="col s4 center-align border-right cell cell-21" cell-row="2" cell-col="1">
-                    {{{ getCellData 2 1 }}}
-                </div>
-                <div class="col s4 center-align cell cell-22" cell-row="2" cell-col="2">
-                    {{{ getCellData 2 2 }}}
-                </div>
-            </div>
 
-            <p class="z-depth-1 white-text deep-orange darken-1 mt20 pa10 mb0" id="game-messages">
-                {{# if game.is.playing }}
-                    <span class="game-message player-turn-message">
-                        {{ gamePlayerName game.status.turn }}'s turn
+                <div class="row mb0 border-top">
+                    <div class="col s4 center-align border-right cell cell-20" cell-row="2" cell-col="0">
+                        {{{ getCellData 2 0 }}}
+                    </div>
+                    <div class="col s4 center-align border-right cell cell-21" cell-row="2" cell-col="1">
+                        {{{ getCellData 2 1 }}}
+                    </div>
+                    <div class="col s4 center-align cell cell-22" cell-row="2" cell-col="2">
+                        {{{ getCellData 2 2 }}}
+                    </div>
+                </div>
+
+                <p class="z-depth-1 white-text deep-orange darken-1 mt20 pa10 mb0" id="game-messages">
+                    {{# if game.is.playing }}
+                        <span class="game-message player-turn-message">
+                            {{ gamePlayerName game.status.turn }}'s turn
+                        </span>
+                    {{/ if }}
+
+                    <span class="game-message player-versus-message">
+                        <span class="left">
+                            {{# if game.is.playing }}
+                                <strong>{{ game.players.[0].score }}</strong> &bull;
+                            {{/ if }}
+
+                            {{ gamePlayerName 0 }}
+                        </span>
+                        <span><strong>vs</strong></span>
+                        <span class="right">
+                            {{ gamePlayerName 1 }}
+                            {{# if game.is.playing }}
+                                <strong>&bull; {{ game.players.[1].score }}</strong>
+                            {{/ if }}
+                        </span>
                     </span>
-                {{/ if }}
+                </p>
 
-                <span class="game-message player-versus-message">
-                    <span class="left">
-                        {{# if game.is.playing }}
-                            <strong>{{ game.players.[0].score }}</strong> &bull;
-                        {{/ if }}
-
-                        {{ gamePlayerName 0 }}
-                    </span>
-                    <span><strong>vs</strong></span>
-                    <span class="right">
-                        {{ gamePlayerName 1 }}
-                        {{# if game.is.playing }}
-                            <strong>&bull; {{ game.players.[1].score }}</strong>
-                        {{/ if }}
-                    </span>
-                </span>
-            </p>
-
-            {{# if game.is.playing }}
-                <script>
-
-                </script>
             {{/ if }}
 
             {{# if not game.status.playerJoined }}
@@ -116,15 +146,26 @@
                 </div>
             {{/ if }}
 
-            <div class="row mt20 mb0">
-                <div class="col s6 pl0">
-                    <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-restart-set"><i class="material-icons left">replay</i>Restart Set</a>
-                </div>
+            {{# if game.is.playing }}
+                <div class="row mt20 mb0">
+                    <div class="col s6 pl0">
+                        <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-restart-set"><i class="material-icons left">replay</i>Restart Set</a>
+                    </div>
 
-                <div class="col s6 pr0">
-                    <a class="waves-effect waves-light btn btn-block"><i class="material-icons left">flag</i>Finish Game</a>
+                    <div class="col s6 pr0">
+                        <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-finish-game"><i class="material-icons left">flag</i>Finish Game</a>
+                    </div>
                 </div>
-            </div>
+            {{/ if }}
+
+
+            {{# if game.is.completed }}
+                <div class="divider mt20 blue-grey darken-2"></div>
+
+                <div class="row center-align mb0">
+                    <a href="{{ pathFor route='home' }}" class="waves-effect waves-teal btn-flat blue-grey-text text-darken-2">Back to Home</a>
+                </div>
+            {{/ if }}
         </div>
 
         <!-- Chat -->
@@ -145,7 +186,7 @@
             <ul class="collection">
                 {{# each gameChat }}
                     <li class="collection-item avatar">
-                        <i class="material-icons circle">face</i>
+                        <img src="{{ gameUserImage userKey }}" alt="{{ userKey }}" class="circle" />
 
                         <span class="title">{{ text }}</span>
                         <p>{{ name }}</p>
@@ -166,7 +207,18 @@
             <p>Caution: The other player may get pissed on you if winning. </p>
         </div>
         <div class="modal-footer">
-            <a href="javascript:void(0);" class="modal-action waves-effect waves-green btn-flat" id="restart-set-okay">Yes</a>
+            <a href="javascript:void(0);" class="modal-action waves-effect waves-green btn-flat" id="restart-set-yes">Yes</a>
+            <a href="javascript:void(0);" class="modal-action modal-close waves-effect waves-green btn-flat">No</a>
+        </div>
+    </div>
+
+    <div id="modal-finish-game" class="modal">
+        <div class="modal-content">
+            <h4>Are you sure?</h4>
+            <p>End this game?</p>
+        </div>
+        <div class="modal-footer">
+            <a href="javascript:void(0);" class="modal-action waves-effect waves-green btn-flat" id="game-finish-yes">Yes</a>
             <a href="javascript:void(0);" class="modal-action modal-close waves-effect waves-green btn-flat">No</a>
         </div>
     </div>

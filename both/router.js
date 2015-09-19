@@ -34,12 +34,7 @@ Router.plugin('ensureSignedIn', {
         template: 'gamePlayFriend',
         waitOn: function() {
             return Meteor.subscribe('gamesOnline')
-        },
-        onBeforeAction: function() {
-            var onlineGamesCountDb = Games.find({}, {sort: {createdAt: -1}}).count();
-            Session.set('onlineGamesCount', onlineGamesCountDb);
-            this.next();
-        },
+        }
     });
 
     // Play with Computer
@@ -60,7 +55,16 @@ Router.plugin('ensureSignedIn', {
             this.next();
         },
         onStop: function() {
+            // End the game
+            var game = Games.findOne({_id: Session.get('gameId')});
+            Meteor.call('gameFinish', game._id, function(error, response) {
+                console.log('gameFinish');
+            });
+
+            // Clear game id in session
             Session.set('gameId', '');
+
+            // Clear in game message interval
             if(typeof interval != 'undefined') {
                 interval.clearInterval();
             }

@@ -46,6 +46,10 @@
             type: String
         },
 
+        userKey: {
+            type: Number
+        },
+
         name: {
             type: String
         },
@@ -110,14 +114,25 @@
         }
     });
 
+// computer
+var computer = new SimpleSchema({
+    selected: {
+        type: Boolean
+    },
+
+    level: {
+        type: Number
+    }
+})
+
 // Games
 Games.attachSchema(new SimpleSchema({
     players: {
         type: [playerInfo]
     },
 
-    ai: {
-        type: Boolean
+    computer: {
+        type: computer
     },
 
     sets: {

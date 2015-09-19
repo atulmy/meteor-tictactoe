@@ -81,8 +81,13 @@ header .button-collapse { display: inline-block; }
 #chat .collection .collection-item p, #sets .collection .collection-item p {
     color: #666;
 }
-#modal-restart-set {
-    max-width: 500px;
+#modal-restart-set, #modal-finish-game {
+    max-width: 400px;
+}
+.card .card-image .card-title {
+    text-shadow: 0px 0px 3px #333;
+    right: 0px;
+    font-weight: 400;
 }
 /*
 .collection-item h5, .collection-item p {

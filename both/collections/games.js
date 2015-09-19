@@ -2,7 +2,8 @@ Games = new Mongo.Collection('games');
 
 Meteor.methods({
 
-    'gamesInsert': function(gameType, isPublic, byUserName) {
+    'gamesInsert': function(gameType, isPublic, level) {
+        console.log(gameType+' '+isPublic+' '+level);
         var response = {
             success: false,
             message: 'There was some error. Please try again.',
@@ -16,9 +17,16 @@ Meteor.methods({
         check(isPublic, Boolean);
 
         // check for AI
-        var ai = false;
+        var computer = {
+            selected: false,
+            level: 0
+        };
         if(gameType === 'computer') {
-            ai = true;
+            if(typeof level === 'undefined') {
+                level = 1; // easy = 1, medium = 2, hard = 3
+            }
+            computer.selected = true;
+            computer.level = parseInt(level);
         }
 
         // create game document
@@ -26,7 +34,7 @@ Meteor.methods({
         var playerOne = {
             id: Meteor.userId(),
             name: Meteor.user().profile.name,
-            image: 'default.png',
+            image: Meteor.user().profile.picture,
             ready: false,
             score: 0,
             winner: false
@@ -34,7 +42,7 @@ Meteor.methods({
         var game = {
             players: [playerOne],
 
-            ai: ai,
+            computer: computer,
 
             sets: [{
                 piece: ['x', 'o'],
@@ -70,7 +78,7 @@ Meteor.methods({
         return response;
     },
 
-    'gameUpdateChatConversation': function(gameId, text) {
+    'gameUpdateChatConversation': function(gameId, text, isComputer) {
         var response = {
             success: false,
             message: 'There was some error. Please try again.'
@@ -82,9 +90,33 @@ Meteor.methods({
         // validate data
         check(gameId, String);
 
+        if(typeof isComputer == 'undefined') {
+            isComputer = false;
+        }
+
         var game = Games.findOne(gameId);
         if(game) {
-            game.chat.conversation.push({id: Meteor.userId(), name: Meteor.user().profile.name, text: text});
+            if(isComputer) {
+                var conversation = {
+                    id: 'COMPUTER',
+                    userKey: 1,
+                    name: 'Computer',
+                    text: text
+                };
+            } else {
+                var userKey = 0;
+                if (game.players[1].id === Meteor.userId()) {
+                    userKey = 1;
+                }
+                conversation = {
+                    id: Meteor.userId(),
+                    userKey: userKey,
+                    name: Meteor.user().profile.name,
+                    text: text
+                };
+            }
+
+            game.chat.conversation.push(conversation);
 
             var result = Games.update(game._id, {$set: {"chat": game.chat}});
             if (result) {
@@ -113,11 +145,16 @@ Meteor.methods({
             var playerTwo = {
                 id: Meteor.userId(),
                 name: Meteor.user().profile.name,
-                image: 'default.png',
+                image: Meteor.user().profile.picture,
                 ready: false,
                 score: 0,
                 winner: false
             };
+            if(game.computer.selected) {
+                playerTwo.id = 'COMPUTER';
+                playerTwo.name = 'Computer';
+                playerTwo.image = '/images/computer.jpg';
+            }
             game.players.push(playerTwo);
 
             var result = Games.update(game._id, {$set: {
@@ -360,6 +397,25 @@ Meteor.methods({
                     }
                 }
             });
+        }
+
+        return response;
+    },
+
+    'gameFinish': function(gameId) {
+        var response = {
+            success: false,
+            message: 'There was some error. Please try again.',
+            setFinished: false
+        };
+
+        var game = Games.findOne(gameId);
+        if(game) {
+            var result = Games.update(game._id, {$set: {"is.completed": true, "is.playing": false}});
+            if (result) {
+                response.success = true;
+                response.message = 'Done.';
+            }
         }
 
         return response;

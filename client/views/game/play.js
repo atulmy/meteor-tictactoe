@@ -1,4 +1,14 @@
 // Game Play
+var computerRandomText = [
+    'Hi',
+    'I am just a computer!',
+    'Actually my name is C3PO',
+    'Artificial Intelligence usually beats natural stupidity',
+    'To err is human... to really foul up requires the root password',
+    'Like car accidents, most hardware problems are due to driver error',
+    'Computer dating is fine, if you\'re a computer',
+    'Any fool can use a computer. Many do'
+];
 
 // Helper
 Template.gamePlay.helpers({
@@ -70,6 +80,31 @@ Template.gamePlay.helpers({
             }
         }
         return playerName;
+    },
+
+    gameUserImage: function(player) {
+        var image = '/images/default-user-image.jpg';
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if(game) {
+            player = parseInt(player);
+            image = game.players[player].image;
+        }
+        return image;
+    },
+
+    gameWinnerName: function() {
+        var winnerName = '';
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if(game) {
+            if(game.players[0].score === game.players[1].score) {
+                winnerName = 'Its a tie! You must play again.';
+            } else if(game.players[0].score > game.players[1].score) {
+                winnerName = 'Winner: '+game.players[0].name;
+            } else {
+                winnerName = 'Winner: '+game.players[1].name;
+            }
+        }
+        return winnerName;
     }
 });
 
@@ -90,12 +125,30 @@ Template.gamePlay.events({
 
             if(text.length > 0) {
 
-                Meteor.call('gameUpdateChatConversation', game._id, text, function (error, response) {
+                Meteor.call('gameUpdateChatConversation', game._id, text, false, function (error, response) {
                     console.log('gameUpdateChatConversation');
                     console.log(response);
 
                     if (!error) {
                         template.$('#form-game-chat-text').val('');
+
+                        if(game.computer.selected) {
+                            Meteor.setTimeout(function() {
+                                if(game.chat.conversation.length == 0) {
+                                    var computerRandomTextKey = 0;
+                                } else if(game.chat.conversation.length == 2) {
+                                    computerRandomTextKey = 1;
+                                } else if(game.chat.conversation.length == 4) {
+                                    computerRandomTextKey = 2;
+                                } else {
+                                    var xmin  = 3;
+                                    var xmax  = (computerRandomText.length - 1);
+                                    computerRandomTextKey = Math.floor( Math.random() * (xmax + 1 - xmin) + xmin );
+                                }
+                                var text = computerRandomText[computerRandomTextKey];
+                                Meteor.call('gameUpdateChatConversation', game._id, text, true);
+                            }, 1500);
+                        }
                     } else {
                         Meteor.call('errorServer');
                     }
@@ -109,7 +162,7 @@ Template.gamePlay.events({
         }
     },
 
-    'click #restart-set-okay': function(event, template) {
+    'click #restart-set-yes': function(event, template) {
         event.preventDefault();
 
         console.log('click #restart-set-okay');
@@ -124,6 +177,32 @@ Template.gamePlay.events({
                         if(response.success) {
                             $('#modal-restart-set').closeModal();
                             Materialize.toast('Current game set has been reset.', 5000);
+                        } else {
+                            Meteor.call('errorServer');
+                        }
+                    } else {
+                        Meteor.call('errorServer');
+                    }
+                });
+            }
+        }
+    },
+
+    'click #game-finish-yes': function(event, template) {
+        event.preventDefault();
+
+        console.log('click #game-finish-yes');
+
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if (game) {
+            if (game.is.playing) {
+                Meteor.call('gameFinish', game._id, function(error, response) {
+                    console.log('gameFinish');
+
+                    if (!error) {
+                        if(response.success) {
+                            $('#modal-finish-game').closeModal();
+                            Materialize.toast('Game has ended.', 5000);
                         } else {
                             Meteor.call('errorServer');
                         }
@@ -186,7 +265,7 @@ Template.gamePlay.rendered = function() {
     var game = Games.findOne({_id: Session.get('gameId')});
     if(game) {
         // Set second player
-        if(typeof game.players[1] === 'undefined' && game.players[0].id !== Meteor.userId()) {
+        if((typeof game.players[1] === 'undefined' && game.players[0].id !== Meteor.userId()) || game.computer.selected) {
             Meteor.call('gamePlayerJoined', game._id, function(error, response) {
                 console.log('gamePlayerJoined');
                 console.log(response);
@@ -198,20 +277,6 @@ Template.gamePlay.rendered = function() {
                 }
             });
         }
-
-        /*
-        game.matrix.forEach(function(data, key){
-            //console.log('row '+row);
-
-            if(data !== null && typeof data.selection !== 'undefined') {
-                if(data.selection === 'x') {
-                    $('#matrix .cell-'+key).html('<i class="material-icons large">close</i>');
-                } else {
-                    $('#matrix .cell-'+key).html('<i class="material-icons large">radio_button_unchecked</i>');
-                }
-            }
-        });
-        */
     } else {
         Router.go('home');
     }
@@ -227,23 +292,24 @@ Template.gamePlay.rendered = function() {
         $('ul.tabs').tabs();
 
         // Modal
-        $('.modal-trigger').leanModal();
+        Meteor.setTimeout(function() {
+            $('.modal-trigger').leanModal();
+        }, 2000);
 
         var i = 0;
         interval = setInterval(function() {
             if($('.player-turn-message').length) {
-                console.log('in');
                 if (i === 0) {
                     $('.player-versus-message').hide();
                     $('.player-turn-message').fadeIn();
                     i = 1;
-                    console.log(1);
                 } else {
                     $('.player-turn-message').hide();
                     $('.player-versus-message').fadeIn();
                     i = 0;
-                    console.log(0);
                 }
+            } else {
+                $('.player-versus-message').show();
             }
         }, 5000);
     });
