@@ -405,13 +405,51 @@ Meteor.methods({
     'gameFinish': function(gameId) {
         var response = {
             success: false,
+            message: 'There was some error. Please try again.'
+        };
+
+        var game = Games.findOne(gameId);
+        if(game) {
+            var result = Games.update(game._id, {$set: {"is.completed": true, "is.playing": false}});
+            if (result) {
+                response.success = true;
+                response.message = 'Done.';
+            }
+        }
+
+        return response;
+    },
+
+    'gameComputersTurn': function(gameId) {
+        var response = {
+            success: false,
             message: 'There was some error. Please try again.',
             setFinished: false
         };
 
         var game = Games.findOne(gameId);
         if(game) {
-            var result = Games.update(game._id, {$set: {"is.completed": true, "is.playing": false}});
+            var currentSet = game.sets[(game.sets.length - 1)];
+            var matrixJSON = JSON.parse(currentSet.matrix);
+            console.log(matrixJSON);
+
+            // Which piece
+            var player = 1;
+            var selection = currentSet.piece[player];
+            var xmin  = 0;
+            var xmax  = 2;
+            var row = Math.floor( Math.random() * (xmax + 1 - xmin) + xmin );
+            var col = Math.floor( Math.random() * (xmax + 1 - xmin) + xmin );
+            matrixJSON[row][col] = {
+                selection: selection,
+                player: player
+            };
+
+            game.sets[(game.sets.length - 1)].matrix = JSON.stringify(matrixJSON);
+
+            var nextTurn = (game.status.turn === 0) ? 1 : 0;
+
+            var result = Games.update(game._id, {$set: {sets: game.sets, "status.turn": nextTurn}});
             if (result) {
                 response.success = true;
                 response.message = 'Done.';

@@ -1,5 +1,3 @@
-var interval;
-
 // Route Configurations
 Router.configure({
     layoutTemplate: 'layoutDefault',
@@ -13,6 +11,9 @@ Router.plugin('ensureSignedIn', {
     except: ['home', 'about']
     //only: ['about']
 });
+
+// Global Variables
+var interval;
 
 // Pages
     // Home
@@ -66,7 +67,12 @@ Router.plugin('ensureSignedIn', {
 
             // Clear in game message interval
             if(typeof interval != 'undefined') {
-                interval.clearInterval();
+                try {
+                    interval.clearInterval();
+                }
+                catch(err) {
+
+                }
             }
         }
     });

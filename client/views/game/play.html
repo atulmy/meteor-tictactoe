@@ -52,7 +52,7 @@
                     <div class="col s6 pl0">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ gameUserImage 0 }}">
+                                <img src="{{ gameUserImage 0 }}" alt="{{ game.players.[0].name }}">
                                 <span class="card-title">{{ game.players.[0].name }}</span>
                             </div>
                             <div class="card-content">
@@ -63,7 +63,7 @@
                     <div class="col s6 pr0">
                         <div class="card">
                             <div class="card-image">
-                                <img src="{{ gameUserImage 1 }}">
+                                <img src="{{ gameUserImage 1 }}" alt="{{ game.players.[1].name }}">
                                 <span class="card-title">{{ game.players.[1].name }}</span>
                             </div>
                             <div class="card-content">
@@ -115,7 +115,7 @@
 
                 <p class="z-depth-1 white-text deep-orange darken-1 mt20 pa10 mb0" id="game-messages">
                     {{# if game.is.playing }}
-                        <span class="game-message player-turn-message">
+                        <span class="game-message player-turn-message display-none">
                             {{ gamePlayerName game.status.turn }}'s turn
                         </span>
                     {{/ if }}
@@ -146,18 +146,16 @@
                 </div>
             {{/ if }}
 
-            {{# if game.is.playing }}
-                <div class="row mt20 mb0">
-                    <div class="col s6 pl0">
-                        <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-restart-set"><i class="material-icons left">replay</i>Restart Set</a>
-                    </div>
 
-                    <div class="col s6 pr0">
-                        <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-finish-game"><i class="material-icons left">flag</i>Finish Game</a>
-                    </div>
+            <div class="row mt20 mb0 {{# if not gameShowFinishRestartButtons }} display-none {{/ if }}">
+                <div class="col s6 pl0">
+                    <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-restart-set"><i class="material-icons left">replay</i>Restart Set</a>
                 </div>
-            {{/ if }}
 
+                <div class="col s6 pr0">
+                    <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-finish-game"><i class="material-icons left">flag</i>Finish Game</a>
+                </div>
+            </div>
 
             {{# if game.is.completed }}
                 <div class="divider mt20 blue-grey darken-2"></div>

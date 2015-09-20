@@ -10,6 +10,8 @@ var computerRandomText = [
     'Any fool can use a computer. Many do'
 ];
 
+var interval;
+
 // Helper
 Template.gamePlay.helpers({
     currentUrl: function(){
@@ -105,6 +107,17 @@ Template.gamePlay.helpers({
             }
         }
         return winnerName;
+    },
+
+    gameShowFinishRestartButtons: function() {
+        var show = false;
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if(game) {
+            if(!game.is.completed && game.is.playing) {
+                show = true;
+            }
+        }
+        return show;
     }
 });
 
@@ -235,12 +248,19 @@ Template.gamePlay.events({
 
                             if (!error) {
                                 if (response.success && response.setFinished) {
+                                    // Set Finished
                                     Meteor.setTimeout(function() {
                                         Meteor.call('gameSetFinished', game._id, function (error, response) {
                                             console.log('gameSetFinished');
                                             console.log(response);
                                         });
                                     }, 3000);
+                                } else if(game.computer.selected) {
+                                    // Check if computer
+                                    Meteor.call('gameComputersTurn', game._id, function (error, response) {
+                                        console.log('gameComputersTurn');
+                                        console.log(response);
+                                    });
                                 }
                             } else {
                                 Meteor.call('errorServer');
@@ -292,12 +312,20 @@ Template.gamePlay.rendered = function() {
         $('ul.tabs').tabs();
 
         // Modal
-        Meteor.setTimeout(function() {
-            $('.modal-trigger').leanModal();
-        }, 2000);
+        $('.modal-trigger').leanModal();
+
+        // Clear in game message interval
+        if(typeof interval != 'undefined') {
+            try {
+                interval.clearInterval();
+            }
+            catch(err) {
+
+            }
+        }
 
         var i = 0;
-        interval = setInterval(function() {
+        interval = Meteor.setInterval(function() {
             if($('.player-turn-message').length) {
                 if (i === 0) {
                     $('.player-versus-message').hide();
