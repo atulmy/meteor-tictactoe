@@ -427,32 +427,34 @@ Meteor.methods({
             setFinished: false
         };
 
-        var game = Games.findOne(gameId);
-        if(game) {
-            var currentSet = game.sets[(game.sets.length - 1)];
-            var matrixJSON = JSON.parse(currentSet.matrix);
-            console.log(matrixJSON);
+        if(Meteor.isServer) {
+            var game = Games.findOne(gameId);
+            if(game) {
+                var currentSet = game.sets[(game.sets.length - 1)];
+                var matrixJSON = JSON.parse(currentSet.matrix);
+                console.log(matrixJSON);
 
-            // Which piece
-            var player = 1;
-            var selection = currentSet.piece[player];
-            var xmin  = 0;
-            var xmax  = 2;
-            var row = Math.floor( Math.random() * (xmax + 1 - xmin) + xmin );
-            var col = Math.floor( Math.random() * (xmax + 1 - xmin) + xmin );
-            matrixJSON[row][col] = {
-                selection: selection,
-                player: player
-            };
+                // Which piece
+                var player = 1;
+                var selection = currentSet.piece[player];
+                var xmin  = 0;
+                var xmax  = 2;
+                var row = Math.floor( Math.random() * (xmax + 1 - xmin) + xmin );
+                var col = Math.floor( Math.random() * (xmax + 1 - xmin) + xmin );
+                matrixJSON[row][col] = {
+                    selection: selection,
+                    player: player
+                };
 
-            game.sets[(game.sets.length - 1)].matrix = JSON.stringify(matrixJSON);
+                game.sets[(game.sets.length - 1)].matrix = JSON.stringify(matrixJSON);
 
-            var nextTurn = (game.status.turn === 0) ? 1 : 0;
+                var nextTurn = (game.status.turn === 0) ? 1 : 0;
 
-            var result = Games.update(game._id, {$set: {sets: game.sets, "status.turn": nextTurn}});
-            if (result) {
-                response.success = true;
-                response.message = 'Done.';
+                var result = Games.update(game._id, {$set: {sets: game.sets, "status.turn": nextTurn}});
+                if (result) {
+                    response.success = true;
+                    response.message = 'Done.';
+                }
             }
         }
 
