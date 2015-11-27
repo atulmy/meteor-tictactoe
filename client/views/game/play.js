@@ -249,12 +249,20 @@ Template.gamePlay.events({
                             if (!error) {
                                 if (response.success && response.setFinished) {
                                     // Set Finished
-                                    Meteor.setTimeout(function() {
-                                        Meteor.call('gameSetFinished', game._id, function (error, response) {
+                                    if(response.won) {
+                                        Meteor.setTimeout(function () {
+                                            Meteor.call('gameSetFinished', game._id, response.won, function (error, response) {
+                                                console.log('gameSetFinished');
+                                                console.log(response);
+                                            });
+                                        }, 3000);
+                                    } else {
+                                        Meteor.call('gameSetFinished', game._id, response.won, function (error, response) {
                                             console.log('gameSetFinished');
                                             console.log(response);
                                         });
-                                    }, 3000);
+                                        Materialize.toast('That was a draw.', 3000);
+                                    }
                                 } else if(game.computer.selected) {
                                     // Check if computer
                                     Meteor.call('gameComputersTurn', game._id, function (error, response) {

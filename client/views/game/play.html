@@ -35,7 +35,11 @@
                         </span>
                         <p>
                             {{# if result }}
-                                using <strong>{{ result.using }}</strong>
+                                {{# if notEqualTo result.using '--'}}
+                                    using <strong>{{ result.using }}</strong>
+                                {{ else }}
+                                    ...
+                                {{/ if }}
                             {{ else }}
                                 ...
                             {{/ if }}

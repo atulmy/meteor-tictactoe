@@ -176,7 +176,8 @@ Meteor.methods({
         var response = {
             success: false,
             message: 'There was some error. Please try again.',
-            setFinished: false
+            setFinished: false,
+            won: false
         };
 
         // check user signed in
@@ -298,6 +299,7 @@ Meteor.methods({
                         });
                     });
                 }
+                response.won = won;
 
                 game.sets[(game.sets.length - 1)].matrix = JSON.stringify(matrixJSON);
                 game.sets[(game.sets.length - 1)].highlightCells = JSON.stringify(highlightCells);
@@ -319,7 +321,7 @@ Meteor.methods({
         return response;
     },
 
-    'gameSetFinished': function(gameId) {
+    'gameSetFinished': function(gameId, won) {
         var response = {
             success: false,
             message: 'There was some error. Please try again.',
@@ -332,14 +334,21 @@ Meteor.methods({
             var sets = game.sets;
 
             // Set winner
-            var winnerKey = (game.status.turn === 1) ? 0 : 1;
-            sets[(sets.length - 1)].result = {
-                winner: game.players[winnerKey].name,
-                using: sets[(sets.length - 1)].piece[winnerKey]
-            };
 
             var players = game.players;
-            players[winnerKey].score = players[winnerKey].score + 1;
+            if(won) {
+                var winnerKey = (game.status.turn === 1) ? 0 : 1;
+                sets[(sets.length - 1)].result = {
+                    winner: game.players[winnerKey].name,
+                    using: sets[(sets.length - 1)].piece[winnerKey]
+                };
+                players[winnerKey].score = players[winnerKey].score + 1;
+            } else {
+                sets[(sets.length - 1)].result = {
+                    winner: 'Draw',
+                    using: '--'
+                };
+            }
 
             if(players[0].score === players[1].score) {
                 players[0].winner = false;
