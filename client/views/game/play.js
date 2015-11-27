@@ -31,6 +31,15 @@ Template.gamePlay.helpers({
         return chatConversation;
     },
 
+    gameChatCount: function() {
+        var count = 0;
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if(game) {
+            count = game.chat.conversation.length;
+        }
+        return count;
+    },
+
     gameSets: function() {
         var sets = [];
         var game = Games.findOne({_id: Session.get('gameId')});
@@ -38,6 +47,15 @@ Template.gamePlay.helpers({
             sets = game.sets.reverse();
         }
         return sets;
+    },
+
+    gameSetsCount: function() {
+        var count = 0;
+        var game = Games.findOne({_id: Session.get('gameId')});
+        if(game) {
+            count = game.sets.length;
+        }
+        return count;
     },
 
     gameHighlightCells: function() {
