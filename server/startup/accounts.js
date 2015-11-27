@@ -5,8 +5,8 @@ Meteor.startup(function() {
         { service: "facebook" },
         {
             $set: {
-                appId: "880293582007783",
-                secret: "fa564d233412ae91ebbb6bf351aef07e"
+                appId: "1067278643307006",
+                secret: "f57889e680e079adc694eebbf60bcce0"
             }
         },
         { upsert: true }
