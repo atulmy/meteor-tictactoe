@@ -1,8 +1,8 @@
 # Tic Tac Toe (aka Xs and 0s)
 
-- Play your all time favourite game Tic Tac Toe online with your friends or with computer.
+- Play your all time favourite game Tic Tac Toe online with your friends
 
-- Chat inside the game with the opponent.
+- Chat inside the game with the opponent
 
 - Have fun!
 
