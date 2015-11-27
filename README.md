@@ -1,7 +1,3 @@
-# Under Development
-
-Expected release: Very soon.
-
 # Tic Tac Toe (aka Xs and 0s)
 
 - Play your all time favourite game Tic Tac Toe online with your friends or with computer.
@@ -15,15 +11,6 @@ Expected release: Very soon.
 URL: http://tictactoe.atulmy.com
 
 Alternate URL: http://bit.ly/tictactoe-online
-
-### Mobile
-
-Coming Soon
-
-## Updates
-
-[2015-08-02]
-* Started development
 
 ## Authors
 
@@ -41,7 +28,6 @@ With Meteor you write apps:
 * using your choice of popular open-source libraries
 
 Documentation is available at http://docs.meteor.com/
-
 
 ## License
 
