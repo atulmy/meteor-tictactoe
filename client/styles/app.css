@@ -89,6 +89,9 @@ header .button-collapse { display: inline-block; }
     right: 0px;
     font-weight: 400;
 }
+.row .col.offset-m1 {
+    margin-left: 8.33333% !important;
+}
 /*
 .collection-item h5, .collection-item p {
     margin: 0px;

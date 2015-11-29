@@ -104,7 +104,7 @@ Meteor.methods({
                     text: text
                 };
             } else {
-                var userKey = 0;
+                var userKey = 1;
                 if (game.players[0].id === Meteor.userId()) {
                     userKey = 0;
                 }
