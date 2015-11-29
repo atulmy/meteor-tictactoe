@@ -2,7 +2,9 @@
 
 // Online Games
 Meteor.publish('gamesOnline', function() {
-    return Games.find({"is.isPublic": true, "is.playing": false, "is.completed": false}, {sort: {createdAt: -1}, limit: 25});
+    var now = new Date().getTime();
+    var msInDay = 1000 * 60 * 60 * 1;
+    return Games.find({"is.isPublic": true, "is.playing": false, "is.completed": false, createdAt:{$gte: new Date(now - msInDay)}}, {sort: {createdAt: -1}, limit: 25});
 });
 
 // List All Games

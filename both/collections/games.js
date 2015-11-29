@@ -105,8 +105,8 @@ Meteor.methods({
                 };
             } else {
                 var userKey = 0;
-                if (game.players[1].id === Meteor.userId()) {
-                    userKey = 1;
+                if (game.players[0].id === Meteor.userId()) {
+                    userKey = 0;
                 }
                 conversation = {
                     id: Meteor.userId(),
