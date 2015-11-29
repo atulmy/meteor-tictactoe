@@ -2,17 +2,17 @@
 
     <div class="row">
         <!-- Tabs -->
-        <div class="col s12 hide-on-med-and-up mb20">
+        <div class="col s12 m12 hide-on-large-only mb20">
             <ul class="tabs">
-                <li class="tab col s3"><a href="#sets">Sets ({{ gameSetsCount }})</a></li>
-                <li class="tab col s3"><a class="active" href="#matrix">Game</a></li>
-                <li class="tab col s3"><a href="#chat">Chat ({{ gameChatCount }})</a></li>
+                <li class="tab col s3 m3"><a href="#sets">Sets ({{ gameSetsCount }})</a></li>
+                <li class="tab col s3 m3"><a class="active" href="#matrix">Game</a></li>
+                <li class="tab col s3 m3"><a href="#chat">Chat ({{ gameChatCount }})</a></li>
             </ul>
         </div>
 
         <!-- Sets -->
-        <div class="col s12 m3 animate-fade-in display-none tab-content" id="sets">
-            <h4 class="white-text mt0 hide-on-small-only"><i class="material-icons small left mt5 mr5">format_list_numbered</i> Sets</h4>
+        <div class="col s12 m12 l3 animate-fade-in display-none tab-content" id="sets">
+            <h4 class="white-text mt0 hide-on-med-only"><i class="material-icons small left mt5 mr5">format_list_numbered</i> Sets</h4>
 
             <ul class="collection">
                 {{# each gameSets }}
@@ -50,10 +50,10 @@
         </div>
 
         <!-- Matrix -->
-        <div class="col s12 m4 offset-m1 center-align tab-content" id="matrix">
+        <div class="col s12 m12 l4 offset-l1 center-align tab-content" id="matrix">
             {{# if game.is.completed }}
                 <div class="row">
-                    <div class="col s6 pl0">
+                    <div class="col s6 m6 pl0">
                         <div class="card">
                             <div class="card-image">
                                 <img src="{{ gameUserImage 0 }}" alt="{{ game.players.[0].name }}">
@@ -64,7 +64,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col s6 pr0">
+                    <div class="col s6 m6 pr0">
                         <div class="card">
                             <div class="card-image">
                                 <img src="{{ gameUserImage 1 }}" alt="{{ game.players.[1].name }}">
@@ -82,37 +82,37 @@
                 </p>
             {{ else }}
                 <div class="row mb0">
-                    <div class="col s4 center-align border-right cell cell-0 cell-00" cell-row="0" cell-col="0">
+                    <div class="col s4 m4 center-align border-right cell cell-0 cell-00" cell-row="0" cell-col="0">
                         {{{ getCellData 0 0 }}}
                     </div>
-                    <div class="col s4 center-align border-right cell cell-1 cell-01" cell-row="0" cell-col="1">
+                    <div class="col s4 m4 center-align border-right cell cell-1 cell-01" cell-row="0" cell-col="1">
                         {{{ getCellData 0 1 }}}
                     </div>
-                    <div class="col s4 center-align cell cell-2 cell-02" cell-row="0" cell-col="2">
+                    <div class="col s4 m4 center-align cell cell-2 cell-02" cell-row="0" cell-col="2">
                         {{{ getCellData 0 2 }}}
                     </div>
                 </div>
 
                 <div class="row mb0 border-top">
-                    <div class="col s4 center-align border-right cell cell-10" cell-row="1" cell-col="0">
+                    <div class="col s4 m4 center-align border-right cell cell-10" cell-row="1" cell-col="0">
                         {{{ getCellData 1 0 }}}
                     </div>
-                    <div class="col s4 center-align border-right cell cell-11" cell-row="1" cell-col="1">
+                    <div class="col s4 m4 center-align border-right cell cell-11" cell-row="1" cell-col="1">
                         {{{ getCellData 1 1 }}}
                     </div>
-                    <div class="col s4 center-align cell cell-12" cell-row="1" cell-col="2">
+                    <div class="col s4 m4 center-align cell cell-12" cell-row="1" cell-col="2">
                         {{{ getCellData 1 2 }}}
                     </div>
                 </div>
 
                 <div class="row mb0 border-top">
-                    <div class="col s4 center-align border-right cell cell-20" cell-row="2" cell-col="0">
+                    <div class="col s4 m4 center-align border-right cell cell-20" cell-row="2" cell-col="0">
                         {{{ getCellData 2 0 }}}
                     </div>
-                    <div class="col s4 center-align border-right cell cell-21" cell-row="2" cell-col="1">
+                    <div class="col s4 m4 center-align border-right cell cell-21" cell-row="2" cell-col="1">
                         {{{ getCellData 2 1 }}}
                     </div>
-                    <div class="col s4 center-align cell cell-22" cell-row="2" cell-col="2">
+                    <div class="col s4 m4 center-align cell cell-22" cell-row="2" cell-col="2">
                         {{{ getCellData 2 2 }}}
                     </div>
                 </div>
@@ -148,15 +148,18 @@
                 <div class="progress mb0 mt0">
                     <div class="indeterminate"></div>
                 </div>
+                <code>
+                    Share URL: <span>{{ currentUrl }}</span>
+                </code>
             {{/ if }}
 
 
             <div class="row mt20 mb0 {{# if not gameShowFinishRestartButtons }} display-none {{/ if }}">
-                <div class="col s6 pl0">
+                <div class="col s6 m6 pl0">
                     <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-restart-set"><i class="material-icons left">replay</i>Restart Set</a>
                 </div>
 
-                <div class="col s6 pr0">
+                <div class="col s6 m6 pr0">
                     <a class="waves-effect waves-light btn btn-block modal-trigger" href="#modal-finish-game"><i class="material-icons left">flag</i>Finish Game</a>
                 </div>
             </div>
@@ -171,15 +174,15 @@
         </div>
 
         <!-- Chat -->
-        <div class="col s12 m3 offset-m1 animate-fade-in display-none tab-content" id="chat">
-            <h4 class="white-text mt0 hide-on-small-only"><i class="material-icons small left mt5 mr5">chat</i> Chat</h4>
+        <div class="col s12 m12 l3 offset-l1 animate-fade-in display-none tab-content" id="chat">
+            <h4 class="white-text mt0 hide-on-med-only"><i class="material-icons small left mt5 mr5">chat</i> Chat</h4>
 
             <form id="form-game-chat">
                 <div class="row white">
-                    <div class="input-field col s12">
+                    <div class="input-field col s8 m8 l12">
                         <input placeholder="type your message here" id="form-game-chat-text" type="text" class="validate" autocomplete="off" />
                     </div>
-                    <div class="input-field col s12">
+                    <div class="input-field col s4 m4 l12">
                         <button class="waves-effect waves-light teal lighten-1 btn btn-block mb20" id="form-game-chat-send" type="submit">Send</button>
                     </div>
                 </div>
