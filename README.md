@@ -12,6 +12,10 @@ URL: http://tictactoe.atulmy.com
 
 Alternate URL: http://bit.ly/tictactoe-online
 
+### Mobile
+
+[![Google Play](http://atulmy.com/attachments/images/google-play.png)](https://play.google.com/store/apps/details?id=com.id19bvvl91lzk6rd1v84688)
+
 ## Authors
 
 Atul Yadav - [GitHub](https://github.com/atulmy) &bull; [Twitter](https://twitter.com/atulmy)
